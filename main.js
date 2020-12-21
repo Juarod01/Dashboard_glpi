@@ -9,6 +9,10 @@ $("#porEstado").click(function(){
     estado();
 });
 
+$("#porTipo").click(function(){
+    tipo();
+});
+
 
 function index(){     
     var chart1, options;
@@ -117,6 +121,65 @@ function estado(){
             data: []
         }, {
             name: 'cerrados',
+            data: []
+    
+        }]
+    };
+}
+
+function tipo(){
+    var chart1, options;
+    $.ajax({
+        url:"http://localhost/dashboard_glpi/consultas/casos/tipo.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            options.series[0].data = data[0].incidencias;
+            options.series[1].data = data[1].requerimientos; 
+            options.series[2].data = data[2].problemas; 
+            options.xAxis.categories = data[3].meses;
+
+            chart1 = new Highcharts.Chart(options);
+        }
+    });
+    options = {
+        chart: {
+            renderTo: 'contenedor',
+            type: 'column',
+            width: 1000
+        },
+        xAxis: {
+            categories:[],
+        },
+        yAxis: {
+            title: {
+                    text: 'Cantidad de casos'
+            }    		
+        },
+        title: {
+            text: 'Casos por tipo'
+        },
+        subtitle: {
+            text: 'Cantidad de incidencias, requerimientos y problemas en los últimos 12 meses'
+        },
+        plotOptions:{
+            series:{
+                cursor:'pointer',
+                pointWidth: 20,
+                fontSize: 5,
+                dataLabels:{
+                    enabled:true,
+                }
+            },
+        },
+        series: [{
+            name: 'Incidencias',
+            data: []
+        }, {
+            name: 'Requerimientos',
+            data: []
+        }, {
+            name: 'Problemas',
             data: []
     
         }]

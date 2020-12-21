@@ -20,19 +20,21 @@ SELECT DATE_FORMAT(closedate, "%M %Y") AS mes, count(id) as casos FROM glpi_950.
 WHERE closedate >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) group by mes 
 order by year(closedate), month(closedate);
 
-SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as casos FROM glpi_950.glpi_tickets 
+SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as incidencias FROM glpi_950.glpi_tickets 
 WHERE date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) AND type = 1 
 group by mes 
 order by year(date), month(date);
 
-SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as casos FROM glpi_950.glpi_tickets 
+SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as requerimientos FROM glpi_950.glpi_tickets 
 WHERE date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) AND type = 2
 group by mes 
 order by year(date), month(date);
 
-SELECT DATE_FORMAT(glpi_tickets.date, "%M %Y") AS mes, count(glpi_tickets.id) as casos FROM glpi_950.glpi_tickets
+SELECT DATE_FORMAT(glpi_tickets.date, "%M %Y") AS mes, count(glpi_tickets.id) as problemas 
+FROM glpi_950.glpi_tickets
 INNER JOIN glpi_problems_tickets
 ON glpi_tickets.id = glpi_problems_tickets.tickets_id
+WHERE glpi_tickets.date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month)
 group by mes
 order by year(date), month(date);
 
