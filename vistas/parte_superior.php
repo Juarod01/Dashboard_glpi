@@ -40,10 +40,10 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark topbar mb-4 static-top shadow">
           <div class="container d-flex justify-content-between">
             <div class="row">
-              <a class="navbar-brand align-self-center" href="index.php">
+              <div id="principal" class="navbar-brand align-self-center">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
-              </a>
+                <span style="cursor: pointer;">Dashboard</span>
+              </div>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -53,13 +53,12 @@
                     <a class="nav-link" href="#">Home</a>
                   </li> -->
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" 
+                    <div class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" style="cursor: pointer;" 
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Casos
-                    </a>
+                        Casos</div>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                      <a class="dropdown-item" href="estado.php">Por estado</a>
-                      <a class="dropdown-item" href="tipo.php">Por tipo</a>
+                      <div id="porEstado" class="dropdown-item" style="cursor: pointer;">Por estado</div>
+                      <div id="porTipo" class="dropdown-item" style="cursor: pointer;">Por tipo</div>
                     </div>
                   </li>
                 </ul>

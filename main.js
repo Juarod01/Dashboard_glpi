@@ -1,13 +1,19 @@
 
-// $(window).load("http://localhost/dashboard_glpi/index.php", index());
-index()
-// $(window).load("http://localhost/dashboard_glpi/estado.php", estado());
-estado()
+// $(window).load("http://localhost/dashboard_glpi/estado.php", index());
+index();
+$("#principal").click(function(){
+    index();
+});
+
+$("#porEstado").click(function(){
+    estado();
+});
+
 
 function index(){     
     var chart1, options;
     $.ajax({
-        url:"http://localhost/dashboard_glpi/consultas/graficos.php",
+        url:"http://localhost/dashboard_glpi/consultas/casos/graficos.php",
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -65,7 +71,7 @@ function index(){
 function estado(){
     var chart1, options;
     $.ajax({
-        url:"http://localhost/dashboard_glpi/consultas/estado.php",
+        url:"http://localhost/dashboard_glpi/consultas/casos/estado.php",
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -78,7 +84,7 @@ function estado(){
     });
     options = {
         chart: {
-            renderTo: 'container_estado',
+            renderTo: 'contenedor',
             type: 'column',
             width: 1000
         },
