@@ -1,15 +1,16 @@
-<?php 
-    require_once "vistas/parte_superior.php";
-?>
+<?php require_once "vistas/parte_superior.php"; ?>
 
 <!--INICIO del cont principal-->
-<div class="container">
+<div id="chartPpal" class="container">
+    <?php 
+        require_once "graficos/index.php";
+    ?>
+</div>
 
-<?php 
-    require_once "graficos/index.php";
-?>
-
-
+<div id="chartSdo" class="container hidden">
+    <?php 
+        require_once "graficos/otros.php";
+    ?>
 </div>
 <!--FIN del cont principal-->
 

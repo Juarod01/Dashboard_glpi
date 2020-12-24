@@ -1,7 +1,6 @@
-<?php
-    include_once "consultas/index.php";
-?>
+<?php include_once "consultas/index.php"; ?>
 
+<!-- cards tickets -->
 <div class="row d-flex justify-content-between text-center">
 
     <div class="card col-md-2 text-white bg-info">
@@ -85,7 +84,7 @@
     </div>
 </div>
 
-<div class="row mt-4">
+<div class="row mt-4 mb-5">
     <!--En este container se muestran los gráficos-->
     <div id="contenedor" class="m-auto"></div>
 </div>

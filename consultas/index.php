@@ -11,7 +11,6 @@ $consulta = $conexion->prepare('SELECT count(id) FROM glpi_950.glpi_tickets WHER
 $consulta->bindValue(':ano', $ano);
 $consulta->bindValue(':mes', $mes);
 $consulta->execute();
-// $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
 $ticketMes=$consulta->fetchAll(PDO::FETCH_COLUMN, 0);
 
 $consulta = $conexion->prepare('SELECT count(id) FROM glpi_950.glpi_tickets WHERE status = 4 AND is_deleted = 0');
@@ -32,5 +31,14 @@ $consulta->bindValue(':mes', $mes);
 $consulta->execute();
 $ticketCerrados=$consulta->fetchAll(PDO::FETCH_COLUMN, 0);
 
+
+$consulta = $conexion->prepare('SELECT DATE_FORMAT(min(date), "%Y-%m-%d") as masAntigua, DATE_FORMAT(max(date), "%Y-%m-%d") as masReciente, 
+                                    date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) as haceAnno 
+                                    FROM glpi_950.glpi_tickets');
+$consulta->execute();
+$fechas = array();
+while ($fila = $consulta->fetch(PDO::FETCH_ASSOC)){
+    array_push($fechas, array($fila["masAntigua"], $fila["masReciente"], $fila["haceAnno"]));
+}
 
 ?>

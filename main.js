@@ -1,15 +1,20 @@
 
-// $(window).load("http://localhost/dashboard_glpi/estado.php", index());
 index();
 $("#principal").click(function(){
+    $("#chartSdo").css("display", "none");
+    $("#chartPpal").css("display", "block");
     index();
 });
 
 $("#porEstado").click(function(){
+    $("#chartPpal").css("display", "none");
+    $("#chartSdo").css("display", "block");
     estado();
 });
 
 $("#porTipo").click(function(){
+    $("#chartPpal").css("display", "none");
+    $("#chartSdo").css("display", "block");
     tipo();
 });
 
@@ -17,7 +22,7 @@ $("#porTipo").click(function(){
 function index(){     
     var chart1, options;
     $.ajax({
-        url:"http://localhost/dashboard_glpi/consultas/casos/graficos.php",
+        url:"http://localhost/dashboard_glpi/consultas/casos/index.php",
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -88,7 +93,7 @@ function estado(){
     });
     options = {
         chart: {
-            renderTo: 'contenedor',
+            renderTo: 'contenedor2',
             type: 'column',
             width: 1000
         },
@@ -144,7 +149,7 @@ function tipo(){
     });
     options = {
         chart: {
-            renderTo: 'contenedor',
+            renderTo: 'contenedor2',
             type: 'column',
             width: 1000
         },
