@@ -4,21 +4,27 @@ include_once "../../bd/conexion.php";
 $objeto = new Conexion();
 $conexion = $objeto->Conectar();
 
-$abiertos = $conexion->prepare('SELECT DATE_FORMAT(date, "%M %Y") AS abiertos, count(id) as casos 
+$meses = $conexion->prepare('SELECT DATE_FORMAT(date, "%M %Y") AS mes FROM glpi_950.glpi_tickets
+                                group by mes 
+                                order by year(date), month(date)');
+$meses->execute();
+$result2 = array();
+while ($fila = $meses->fetch(PDO::FETCH_ASSOC)){
+    array_push($result2, array($fila["mes"]));
+}
+
+$abiertos = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS abiertos, count(id) as casos 
                                     FROM glpi_950.glpi_tickets 
-                                    WHERE date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) 
                                     group by abiertos  
                                     order by year(date), month(date)');
 $abiertos->execute();
 $result = array();
-$meses = array();
 while ($fila = $abiertos->fetch(PDO::FETCH_ASSOC)){
     array_push($result, array($fila["abiertos"], $fila["casos"]));
-    array_push($meses, array($fila["abiertos"]));
 }
 
-$cerrados = $conexion->prepare('SELECT DATE_FORMAT(closedate, "%M %Y") AS cerrados, count(id) as casos FROM glpi_950.glpi_tickets
-                                    WHERE closedate >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) 
+$cerrados = $conexion->prepare('SELECT DATE_FORMAT(closedate, "%Y-%m") AS cerrados, count(id) as casos FROM glpi_950.glpi_tickets
+                                    WHERE closedate is not null
                                     group by cerrados
                                     order by year(closedate), month(closedate)');
 $cerrados->execute();
@@ -27,7 +33,6 @@ while ($fila = $cerrados->fetch(PDO::FETCH_ASSOC)){
     array_push($result1, array($fila["cerrados"], $fila["casos"]));
 }
 
-$final = array();
-array_push($final, array("abiertos" => $result), array("cerrados" => $result1), array("meses" => $meses));
+$final = ["abiertos" => $result, "cerrados" => $result1, "meses" => $result2];
 
 print json_encode($final, JSON_NUMERIC_CHECK);

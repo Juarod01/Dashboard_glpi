@@ -18,8 +18,17 @@ $("#porTipo").click(function(){
     tipo();
 });
 
+$("#filtrar").click(function(){
+    var inicio = $("#fecha1").val()
+    var fin = $("#fecha2").val()
+    console.log(inicio)
+    console.log(fin)
+    estado(inicio, fin)
+});
 
-function index(){     
+
+
+function index(){
     var chart1, options;
     $.ajax({
         url:"http://localhost/dashboard_glpi/consultas/casos/index.php",
@@ -77,16 +86,21 @@ function index(){
     }
 }
 
-function estado(){
+function estado(inicio = "July 2020", fin){
     var chart1, options;
     $.ajax({
         url:"http://localhost/dashboard_glpi/consultas/casos/estado.php",
         type: "POST",
         dataType:"json",
         success:function(data){
-            options.series[0].data = data[0].abiertos;
-            options.series[1].data = data[1].cerrados; 
-            options.xAxis.categories = data[2].meses;
+            meses = data.meses;
+            console.log(data)
+            // console.log(meses)
+            var eData =  meses.filter(d => d == inicio);
+            // console.log(eData)
+            options.series[0].data = data.abiertos;
+            options.series[1].data = data.cerrados; 
+            options.xAxis.categories = data.meses;
 
             chart1 = new Highcharts.Chart(options);
         }
@@ -139,10 +153,11 @@ function tipo(){
         type: "POST",
         dataType:"json",
         success:function(data){
-            options.series[0].data = data[0].incidencias;
-            options.series[1].data = data[1].requerimientos; 
-            options.series[2].data = data[2].problemas; 
-            options.xAxis.categories = data[3].meses;
+            console.log(data)
+            options.series[0].data = data.incidencias;
+            options.series[1].data = data.requerimientos; 
+            options.series[2].data = data.problemas; 
+            options.xAxis.categories = data.meses;
 
             chart1 = new Highcharts.Chart(options);
         }

@@ -4,22 +4,29 @@ include_once "../../bd/conexion.php";
 $objeto = new Conexion();
 $conexion = $objeto->Conectar();
 
-$incidencias = $conexion->prepare('SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as incidencias 
+$meses = $conexion->prepare('SELECT DATE_FORMAT(date, "%M %Y") AS mes FROM glpi_950.glpi_tickets
+                                group by mes 
+                                order by year(date), month(date)');
+$meses->execute();
+$result3 = array();
+while ($fila = $meses->fetch(PDO::FETCH_ASSOC)){
+    array_push($result3, array($fila["mes"]));
+}
+
+$incidencias = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS mes, count(id) as incidencias 
                                     FROM glpi_950.glpi_tickets 
-                                    WHERE date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) AND type = 1 
+                                    WHERE type = 1 
                                     group by mes  
                                     order by year(date), month(date)');
 $incidencias->execute();
 $result = array();
-$meses = array();
 while ($fila = $incidencias->fetch(PDO::FETCH_ASSOC)){
     array_push($result, array($fila["mes"], $fila["incidencias"]));
-    array_push($meses, array($fila["mes"]));
 }
 
-$requerimientos = $conexion->prepare('SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as requerimientos 
+$requerimientos = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS mes, count(id) as requerimientos 
                                     FROM glpi_950.glpi_tickets
-                                    WHERE date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month) AND type = 2 
+                                    WHERE type = 2 
                                     group by mes
                                     order by year(date), month(date)');
 $requerimientos->execute();
@@ -28,11 +35,10 @@ while ($fila = $requerimientos->fetch(PDO::FETCH_ASSOC)){
     array_push($result1, array($fila["mes"], $fila["requerimientos"]));
 }
 
-$problemas = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%M %Y") AS mes, count(glpi_tickets.id) as problemas 
+$problemas = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, count(glpi_tickets.id) as problemas 
                                     FROM glpi_950.glpi_tickets
                                     INNER JOIN glpi_problems_tickets
                                     ON glpi_tickets.id = glpi_problems_tickets.tickets_id 
-                                    WHERE glpi_tickets.date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 11 month)
                                     group by mes
                                     order by year(date), month(date)');
 $problemas->execute();
@@ -54,7 +60,6 @@ for ($i=0; $i < count($result); $i++) {
     }
 }
 
-$final = array();
-array_push($final, array("incidencias" => $result), array("requerimientos" => $result1), array("problemas" => $problema_p), array("meses" => $meses));
+$final = ["incidencias" => $result, "requerimientos" => $result1, "problemas" => $problema_p, "meses" => $result3];
 
 print json_encode($final, JSON_NUMERIC_CHECK);
