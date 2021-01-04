@@ -1,3 +1,9 @@
+let months = ["01", "02", "03", "04", "05", "'06", "07", "08", "09", "10", "11", "12"];
+let fecha = new Date();
+let fecha2 = fecha.getTime()-(12*(30*24*60*60*1000))
+let fechaInicio = new Date(fecha2);
+let inicio = fechaInicio.getFullYear() + "-" + months[fechaInicio.getMonth()];
+let fin = fecha.getFullYear() + "-" + months[fecha.getMonth()];
 
 index();
 $("#principal").click(function(){
@@ -6,27 +12,22 @@ $("#principal").click(function(){
     index();
 });
 
-$("#porEstado").click(function(){
-    $("#chartPpal").css("display", "none");
-    $("#chartSdo").css("display", "block");
-    estado();
-});
-
-$("#porTipo").click(function(){
-    $("#chartPpal").css("display", "none");
-    $("#chartSdo").css("display", "block");
-    tipo();
-});
-
-$("#filtrar").click(function(){
-    var inicio = $("#fecha1").val()
-    var fin = $("#fecha2").val()
-    console.log(inicio)
-    console.log(fin)
-    estado(inicio, fin)
-});
-
-
+function porEstado(){
+    $.post("estado.php", function(data){
+        $("#chartPpal").css("display", "none");
+        $("#chartSdo").css("display", "block");
+        $("#chartSdo").html(data);
+        estado(inicio, fin);
+    });
+}
+function porTipo(){
+    $.post("tipo.php", function(data){
+        $("#chartPpal").css("display", "none");
+        $("#chartSdo").css("display", "block");
+        $("#chartSdo").html(data);
+        tipo(inicio, fin);
+    });
+}
 
 function index(){
     var chart1, options;
@@ -35,7 +36,7 @@ function index(){
         type: "POST",
         dataType:"json",
         success:function(data){
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0; i <= data.length; i++) {
                 options.series[i].name = data[0].annos[i];
                 options.series[i].data = data[1].data[i]; 
             }
@@ -77,30 +78,37 @@ function index(){
             {
             // name:'2019',
             // data:[]
-        },
-        {
+        },{
             // name:'2020',
             // data:[]
+        },{
+
         }
     ],     
     }
 }
 
-function estado(inicio = "July 2020", fin){
+function estado(i, f){
     var chart1, options;
     $.ajax({
         url:"http://localhost/dashboard_glpi/consultas/casos/estado.php",
         type: "POST",
         dataType:"json",
         success:function(data){
-            meses = data.meses;
-            console.log(data)
-            // console.log(meses)
-            var eData =  meses.filter(d => d == inicio);
-            // console.log(eData)
-            options.series[0].data = data.abiertos;
-            options.series[1].data = data.cerrados; 
-            options.xAxis.categories = data.meses;
+            meses = data.abiertos;
+            let abiertos = [], cerrados = [], meses2 = []
+
+            for (let j = 0; j < meses.length; j++) {
+                if (meses[j][0] >= i && meses[j][0] <= f) {
+                    abiertos.push(data.abiertos[j][1])
+                    cerrados.push(data.cerrados[j][1])
+                    meses2.push(data.meses[j])
+                }
+            }
+
+            options.series[0].data = abiertos;
+            options.series[1].data = cerrados; 
+            options.xAxis.categories = meses2;
 
             chart1 = new Highcharts.Chart(options);
         }
@@ -146,18 +154,29 @@ function estado(inicio = "July 2020", fin){
     };
 }
 
-function tipo(){
+function tipo(i, f){
     var chart1, options;
     $.ajax({
         url:"http://localhost/dashboard_glpi/consultas/casos/tipo.php",
         type: "POST",
         dataType:"json",
         success:function(data){
-            console.log(data)
-            options.series[0].data = data.incidencias;
-            options.series[1].data = data.requerimientos; 
-            options.series[2].data = data.problemas; 
-            options.xAxis.categories = data.meses;
+            meses = data.incidencias;
+            let incidencias = [], requerimientos = [], problemas = [], meses2 = []
+
+            for (let j = 0; j < meses.length; j++) {
+                if (meses[j][0] >= i && meses[j][0] <= f) {
+                    incidencias.push(data.incidencias[j][1])
+                    requerimientos.push(data.requerimientos[j][1])
+                    problemas.push(data.problemas[j][1])
+                    meses2.push(data.meses[j])
+                }
+            }
+            // console.log(data)
+            options.series[0].data = incidencias;
+            options.series[1].data = requerimientos; 
+            options.series[2].data = problemas; 
+            options.xAxis.categories = meses2;
 
             chart1 = new Highcharts.Chart(options);
         }

@@ -50,8 +50,8 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Casos</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a id="porEstado" class="dropdown-item" style="cursor: pointer;">Por estado</a>
-                  <a id="porTipo" class="dropdown-item" style="cursor: pointer;">Por tipo</a>
+                  <a id="" class="dropdown-item" onclick="javascript:porEstado();" style="cursor: pointer;">Por estado</a>
+                  <a id="" class="dropdown-item" onclick="javascript:porTipo();" style="cursor: pointer;">Por tipo</a>
                 </div>
               </li>
             </ul>

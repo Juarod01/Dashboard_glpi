@@ -12,8 +12,7 @@
                 min="<?php echo $fechas[0][0]; ?>" max="<?php echo $fechas[0][1]; ?>">
         </div>
         <div class="mt-2 text-center">
-            <button id="filtrar" class="btn btn-primary">filtrar</button>
-            <!-- <button class="btn btn-secondary">limpiar</button> -->
+            <button id="filtrarTipo" class="btn btn-primary">filtrar</button>
         </div>
     </div>
 
@@ -23,3 +22,11 @@
     </div>
 
 </div>
+
+<script type="text/javascript">
+$("#filtrarTipo").click(function(){
+    let inicio1 = $("#fecha1").val()
+    let fin1 = $("#fecha2").val()
+    tipo(inicio1, fin1)
+});
+</script>

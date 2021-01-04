@@ -15,7 +15,7 @@ SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as casos FROM glpi_950.glpi_
 group by mes 
 order by year(date), month(date);
 -- Muestra todos los meses
-SELECT DATE_FORMAT(date, "%Y-%m") AS mes FROM glpi_950.glpi_tickets 
+SELECT DATE_FORMAT(date, "%M %Y") AS mes1, DATE_FORMAT(date, "%Y-%m") AS mes FROM glpi_950.glpi_tickets 
 group by mes 
 order by year(date), month(date);
 -- Mes - año y cantidad de casos cerrados, agrupado por mes y ordenados por año y mes
