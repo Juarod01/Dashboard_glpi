@@ -7,11 +7,7 @@
     ?>
 </div>
 
-<div id="chartSdo" class="container">
-    <?php 
-        // require_once "graficos/estado.php";
-    ?>
-</div>
+<div id="chartSdo" class="container"></div>
 <!--FIN del cont principal-->
 
 <?php require_once "vistas/parte_inferior.php"?>

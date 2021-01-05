@@ -47,7 +47,7 @@ SELECT DATE_FORMAT(min(date), "%Y-%m") as masAntigua, DATE_FORMAT(max(date), "%Y
 	DATE_FORMAT(date_add(now(), interval - 11 month), "%Y-%m") as haceAnno
 FROM glpi_950.glpi_tickets;
 -- Satisfaccion agrupada por meses
-SELECT DATE_FORMAT(date_answered, "%m-%Y") AS mes, ROUND((100*AVG(satisfaction))/5,2) as promedio 
+SELECT DATE_FORMAT(date_answered, "%Y-%m") AS mes, ROUND((100*AVG(satisfaction))/5,2) as promedio 
 FROM glpi_950.glpi_ticketsatisfactions
 WHERE satisfaction is not null
 group by mes 

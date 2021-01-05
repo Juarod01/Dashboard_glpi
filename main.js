@@ -29,6 +29,15 @@ function porTipo(){
     });
 }
 
+function porSatisfaccion(){
+    $.post("satisfaccion.php", function(data){
+        $("#chartPpal").css("display", "none");
+        $("#chartSdo").css("display", "block");
+        $("#chartSdo").html(data);
+        satisfaccion(inicio, fin);
+    });
+}
+
 function index(){
     var chart1, options;
     $.ajax({
@@ -221,6 +230,67 @@ function tipo(i, f){
             name: 'Problemas',
             data: []
     
+        }]
+    };
+}
+
+function satisfaccion(i, f){
+    var chart1, options;
+    $.ajax({
+        url:"consultas/casos/satisfaccion.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            meses = data.promedio;
+            let promedio = [], meses2 = []
+
+            for (let j = 0; j < meses.length; j++) {
+                if (meses[j][0] >= i && meses[j][0] <= f) {
+                    promedio.push(data.promedio[j][1])
+                    meses2.push(data.meses[j])
+                }
+            }
+            // console.log(data)
+            options.series[0].data = promedio;
+            options.xAxis.categories = meses2;
+
+            chart1 = new Highcharts.Chart(options);
+        }
+    });
+    options = {
+        chart: {
+            renderTo: 'contenedor2',
+            type: 'column',
+            width: 1000
+        },
+        xAxis: {
+            categories:[],
+        },
+        yAxis: {
+            title: {
+                    text: 'Promedio'
+            }    		
+        },
+        title: {
+            text: 'Promedio'
+        },
+        subtitle: {
+            text: 'Promedio de satisfacción en los últimos 12 meses'
+        },
+        plotOptions:{
+            series:{
+                cursor:'pointer',
+                pointWidth: 20,
+                fontSize: 5,
+                dataLabels:{
+                    enabled:true,
+                    format: '{point.y:.1f}%'
+                }
+            },
+        },
+        series: [{
+            name: 'Satisfacción',
+            data: []
         }]
     };
 }
