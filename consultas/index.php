@@ -6,7 +6,7 @@ $objeto = new Conexion();
 $conexion = $objeto->Conectar();
 
 $ano = date("Y");
-$mes = date("m") - 4;
+$mes = date("m");
 
 $consulta = $conexion->prepare('SELECT count(id) FROM '.nombre_bd.'.glpi_tickets 
                                     WHERE year(date) = :ano AND month(date) = :mes AND is_deleted = 0');
@@ -31,7 +31,7 @@ $consulta->execute();
 $ticketResueltos=$consulta->fetchAll(PDO::FETCH_COLUMN, 0);
 
 $consulta = $conexion->prepare('SELECT count(id) FROM '.nombre_bd.'.glpi_tickets 
-                                    WHERE year(date) = :ano AND month(date) = :mes AND status = 6 AND is_deleted = 0');
+                                    WHERE year(closedate) = :ano AND month(closedate) = :mes AND status = 6 AND is_deleted = 0');
 $consulta->bindValue(':ano', $ano);
 $consulta->bindValue(':mes', $mes);
 $consulta->execute();

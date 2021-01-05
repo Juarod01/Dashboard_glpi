@@ -32,7 +32,7 @@ function porTipo(){
 function index(){
     var chart1, options;
     $.ajax({
-        url:"http://localhost/dashboard_glpi/consultas/casos/index.php",
+        url:"consultas/casos/index.php",
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -91,7 +91,7 @@ function index(){
 function estado(i, f){
     var chart1, options;
     $.ajax({
-        url:"http://localhost/dashboard_glpi/consultas/casos/estado.php",
+        url:"consultas/casos/estado.php",
         type: "POST",
         dataType:"json",
         success:function(data){
@@ -157,7 +157,7 @@ function estado(i, f){
 function tipo(i, f){
     var chart1, options;
     $.ajax({
-        url:"http://localhost/dashboard_glpi/consultas/casos/tipo.php",
+        url:"consultas/casos/tipo.php",
         type: "POST",
         dataType:"json",
         success:function(data){
