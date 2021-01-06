@@ -37,6 +37,12 @@ $consulta->bindValue(':mes', $mes);
 $consulta->execute();
 $ticketCerrados=$consulta->fetchAll(PDO::FETCH_COLUMN, 0);
 
+$consulta = $conexion->prepare('SELECT ROUND((100*AVG(satisfaction))/5,2) as promedio 
+                                    FROM '.nombre_bd.'.glpi_ticketsatisfactions 
+                                    WHERE satisfaction is not null');
+$consulta->execute();
+$satisfaccion=$consulta->fetchAll(PDO::FETCH_COLUMN, 0);
+
 
 $consulta = $conexion->prepare('SELECT DATE_FORMAT(min(date), "%Y-%m") as masAntigua, DATE_FORMAT(max(date), "%Y-%m") as masReciente, 
                                     DATE_FORMAT(date_add(now(), interval - 12 month), "%Y-%m") as haceAnno 

@@ -53,11 +53,10 @@ WHERE satisfaction is not null
 group by mes 
 order by year(date_answered), month(date_answered);
 -- Localización y cantidad de casos en los últimos 11 meses, ordenados por los 10 primeros con mas casos
-SELECT glpi_locations.name AS localizacion, count(glpi_tickets.id) as casos 
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_locations.name AS localizacion, count(glpi_tickets.id) as casos 
 FROM glpi_950.glpi_tickets 
 INNER JOIN glpi_950.glpi_locations
 ON glpi_tickets.locations_id = glpi_locations.id
-WHERE date >= date_add(CONCAT(year(now()), "-", month(now()), "-", "01"), interval - 12 month)
-group by localizacion
-order by casos DESC
-LIMIT 10;
+WHERE year(glpi_tickets.date) = 2020 AND month(glpi_tickets.date) > 5
+group by mes, localizacion
+order by mes ASC;
