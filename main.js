@@ -312,7 +312,6 @@ function localizacion(i, f){
         dataType:"json",
         success:function(data){
             let datos = data.localizacion;
-            let localizacion = data.areas;
             let areas = data.areas;
             let newData = [];
             // Filtrar por el tiempo indicado
@@ -347,13 +346,11 @@ function localizacion(i, f){
             })
             // La funcion reverse, los deja ordenados de forma descendente
             areas.reverse();
+            // Extrae los primeros 15 elementos del array
+            let nuevo = areas.slice(0,15)
 
-            console.log(areas)
-
-            // console.log(localizacion)
-
-            options.series[0].data = areas;
-            options.xAxis.categories = localizacion;
+            options.series[0].data = nuevo;
+            options.xAxis.categories = nuevo;
 
             chart1 = new Highcharts.Chart(options);
         }
@@ -363,7 +360,7 @@ function localizacion(i, f){
             renderTo: 'contenedor2',
             type: 'bar',
             width: 1000,
-            height: 3000
+            height: 500
         },
         xAxis: {
             categories:[],
