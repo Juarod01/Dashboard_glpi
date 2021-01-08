@@ -38,6 +38,15 @@ function porSatisfaccion(){
     });
 }
 
+function porLocalizacion(){
+    $.post("localizacion.php", function(data){
+        $("#chartPpal").css("display", "none");
+        $("#chartSdo").css("display", "block");
+        $("#chartSdo").html(data);
+        localizacion(inicio, fin);
+    });
+}
+
 function index(){
     var chart1, options;
     $.ajax({
@@ -290,6 +299,95 @@ function satisfaccion(i, f){
         },
         series: [{
             name: 'Satisfacción',
+            data: []
+        }]
+    };
+}
+
+function localizacion(i, f){
+    var chart1, options;
+    $.ajax({
+        url:"consultas/casos/localizacion.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let datos = data.localizacion;
+            let localizacion = data.areas;
+            let areas = data.areas;
+            let newData = [];
+            // Filtrar por el tiempo indicado
+            for (let j = 0; j < datos.length; j++) {
+                if(datos[j] >= i && datos[j] <= f){
+                    newData.push([datos[j][1], datos[j][2]]);
+                }
+            }
+            // Sumar cantidad de casos de localizaciones iguales
+            for (let j = 0; j < newData.length; j++) {
+                for (let k = 0; k < areas.length; k++) {
+                    if (areas[k][1] == undefined) {
+                        if (areas[k] == newData[j][0]) {
+                            areas[k][1] = newData[j][1];
+                        }
+                    }else{
+                        if (areas[k][0] == newData[j][0]) {
+                            areas[k][1] = areas[k][1] + newData[j][1];
+                        }
+                    }
+                }
+            }
+            // Llenar localizaciones que no tiene cantidad de casos, con 0
+            for (let j = 0; j < areas.length; j++) {
+                if (areas[j][1] == undefined) {
+                    areas[j][1] = 0;
+                }
+            }
+            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
+            areas.sort(function(a,b) {
+                return a[1] - b[1];
+            })
+            // La funcion reverse, los deja ordenados de forma descendente
+            areas.reverse();
+
+            console.log(areas)
+
+            // console.log(localizacion)
+
+            options.series[0].data = areas;
+            options.xAxis.categories = localizacion;
+
+            chart1 = new Highcharts.Chart(options);
+        }
+    });
+    options = {
+        chart: {
+            renderTo: 'contenedor2',
+            type: 'bar',
+            width: 1000,
+            height: 3000
+        },
+        xAxis: {
+            categories:[],
+        },
+        yAxis: {
+            title: {
+                    text: 'Cantidad de casos'
+            }    		
+        },
+        title: {
+            text: 'Cantidad de casos por localización'
+        },
+        plotOptions:{
+            series:{
+                cursor:'pointer',
+                pointWidth: 20,
+                fontSize: 5,
+                dataLabels:{
+                    enabled:true,
+                }
+            },
+        },
+        series: [{
+            name: 'Areas',
             data: []
         }]
     };
