@@ -47,6 +47,15 @@ function porLocalizacion(){
     });
 }
 
+function porTecnico(){
+    $.post("tecnico.php", function(data){
+        $("#chartPpal").css("display", "none");
+        $("#chartSdo").css("display", "block");
+        $("#chartSdo").html(data);
+        tecnico(inicio, fin);
+    });
+}
+
 function index(){
     var chart1, options;
     $.ajax({
@@ -373,6 +382,9 @@ function localizacion(i, f){
         title: {
             text: 'Cantidad de casos por localización'
         },
+        subtitle: {
+            text: 'Top 15 de areas con mas casos generados'
+        },
         plotOptions:{
             series:{
                 cursor:'pointer',
@@ -385,6 +397,96 @@ function localizacion(i, f){
         },
         series: [{
             name: 'Areas',
+            data: []
+        }]
+    };
+}
+
+function tecnico(i, f){
+    var chart1, options;
+    $.ajax({
+        url:"consultas/casos/tecnico.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let datos = data.casosTecnicos;
+            let tecnico = data.tecnico;
+            let newData = [];
+            // Filtrar por el tiempo indicado
+            for (let j = 0; j < datos.length; j++) {
+                if(datos[j] >= i && datos[j] <= f){
+                    newData.push([datos[j][1], datos[j][2]]);
+                }
+            }
+            // Sumar cantidad de casos de localizaciones iguales
+            for (let j = 0; j < newData.length; j++) {
+                for (let k = 0; k < tecnico.length; k++) {
+                    if (tecnico[k][1] == undefined) {
+                        if (tecnico[k] == newData[j][0]) {
+                            tecnico[k][1] = newData[j][1];
+                        }
+                    }else{
+                        if (tecnico[k][0] == newData[j][0]) {
+                            tecnico[k][1] = tecnico[k][1] + newData[j][1];
+                        }
+                    }
+                }
+            }
+            // Llenar localizaciones que no tiene cantidad de casos, con 0
+            for (let j = 0; j < tecnico.length; j++) {
+                if (tecnico[j][1] == undefined) {
+                    tecnico[j][1] = 0;
+                }
+            }
+            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
+            tecnico.sort(function(a,b) {
+                return a[1] - b[1];
+            })
+            // La funcion reverse, los deja ordenados de forma descendente
+            tecnico.reverse();
+            // Extrae los primeros 15 elementos del array
+            // let nuevo = tecnico.slice(0,15)
+            // console.log(nuevo)
+
+            options.series[0].data = tecnico;
+            options.xAxis.categories = tecnico;
+
+            chart1 = new Highcharts.Chart(options);
+        }
+    });
+    options = {
+        chart: {
+            renderTo: 'contenedor2',
+            type: 'bar',
+            width: 1000,
+            height: 500
+        },
+        xAxis: {
+            categories:[],
+        },
+        yAxis: {
+            title: {
+                    text: 'Cantidad de casos'
+            }    		
+        },
+        title: {
+            text: 'Cantidad de casos atendidos por tecnico'
+        },
+        subtitle: {
+            text: ''
+        },
+        plotOptions:{
+            series:{
+                cursor:'pointer',
+                pointWidth: 20,
+                fontSize: 5,
+                dataLabels:{
+                    enabled:true,
+                }
+            },
+        },
+        series: [{
+            name: 'Tecnicos',
             data: []
         }]
     };

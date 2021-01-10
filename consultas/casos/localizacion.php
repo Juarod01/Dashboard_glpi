@@ -4,7 +4,7 @@ include_once "../../bd/conexion.php";
 $objeto = new Conexion();
 $conexion = $objeto->Conectar();
 
-$nombreLocalizacion = $conexion->prepare('SELECT distinct(name) as nombre FROM glpi_950.glpi_locations');
+$nombreLocalizacion = $conexion->prepare('SELECT distinct(name) as nombre FROM '.nombre_bd.'.glpi_locations');
 $nombreLocalizacion->execute();
 $areas = array();
 while ($fila = $nombreLocalizacion->fetch(PDO::FETCH_ASSOC)){
@@ -13,7 +13,7 @@ while ($fila = $nombreLocalizacion->fetch(PDO::FETCH_ASSOC)){
 
 $localizacion = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_locations.name AS localizacion, count(glpi_tickets.id) as casos
                                     FROM '.nombre_bd.'.glpi_tickets
-                                    INNER JOIN glpi_950.glpi_locations
+                                    INNER JOIN '.nombre_bd.'.glpi_locations
                                     ON glpi_tickets.locations_id = glpi_locations.id
                                     group by mes, localizacion
                                     order by casos DESC');

@@ -52,11 +52,33 @@ FROM glpi_950.glpi_ticketsatisfactions
 WHERE satisfaction is not null
 group by mes 
 order by year(date_answered), month(date_answered);
--- Localización y cantidad de casos en los últimos 11 meses, ordenados por los 10 primeros con mas casos
+-- satisfaccion total
+SELECT ROUND((100*AVG(satisfaction))/5,2) as promedio 
+FROM glpi_950.glpi_ticketsatisfactions
+WHERE satisfaction is not null;
+-- Cantidad de casos por localización, agrupado por mes
 SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_locations.name AS localizacion, count(glpi_tickets.id) as casos 
 FROM glpi_950.glpi_tickets 
 INNER JOIN glpi_950.glpi_locations
 ON glpi_tickets.locations_id = glpi_locations.id
-WHERE year(glpi_tickets.date) = 2020 AND month(glpi_tickets.date) > 5
 group by mes, localizacion
 order by mes ASC;
+-- Cantidad de casos por técnico, agrupado por mes
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, concat(glpi_users.firstname, " ", glpi_users.realname, " (", glpi_users.name, ")") AS nombre, count(glpi_tickets.id) as casos 
+FROM glpi_950.glpi_tickets 
+INNER JOIN glpi_950.glpi_tickets_users
+ON glpi_tickets.id = glpi_tickets_users.tickets_id
+INNER JOIN glpi_950.glpi_users
+ON glpi_tickets_users.users_id = glpi_users.id
+WHERE glpi_tickets_users.type = 2
+group by mes, nombre
+order by mes ASC;
+-- Muestra solo técnicos y admin
+SELECT concat(glpi_users.firstname, " ", glpi_users.realname, " (", glpi_users.name, ")") AS nombre
+FROM glpi_950.glpi_tickets 
+INNER JOIN glpi_950.glpi_tickets_users
+ON glpi_tickets.id = glpi_tickets_users.tickets_id
+INNER JOIN glpi_950.glpi_users
+ON glpi_tickets_users.users_id = glpi_users.id
+WHERE glpi_tickets_users.type = 2
+group by nombre;
