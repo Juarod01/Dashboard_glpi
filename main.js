@@ -74,7 +74,7 @@ function index(){
         chart:{
             renderTo: 'contenedor',
             type: 'spline',
-            width: 1000
+            width: 1100
         },
         title:{
             text: 'Evolución de casos'
@@ -144,7 +144,7 @@ function estado(i, f){
         chart: {
             renderTo: 'contenedor2',
             type: 'column',
-            width: 1000
+            width: 1100
         },
         xAxis: {
             categories:[],
@@ -212,7 +212,7 @@ function tipo(i, f){
         chart: {
             renderTo: 'contenedor2',
             type: 'column',
-            width: 1000
+            width: 1100
         },
         xAxis: {
             categories:[],
@@ -279,7 +279,7 @@ function satisfaccion(i, f){
         chart: {
             renderTo: 'contenedor2',
             type: 'column',
-            width: 1000
+            width: 1100
         },
         xAxis: {
             categories:[],
@@ -325,7 +325,7 @@ function localizacion(i, f){
             let newData = [];
             // Filtrar por el tiempo indicado
             for (let j = 0; j < datos.length; j++) {
-                if(datos[j] >= i && datos[j] <= f){
+                if(datos[j][0] >= i && datos[j][0] <= f){
                     newData.push([datos[j][1], datos[j][2]]);
                 }
             }
@@ -368,7 +368,7 @@ function localizacion(i, f){
         chart: {
             renderTo: 'contenedor2',
             type: 'bar',
-            width: 1000,
+            width: 1100,
             height: 500
         },
         xAxis: {
@@ -414,7 +414,7 @@ function tecnico(i, f){
             let newData = [];
             // Filtrar por el tiempo indicado
             for (let j = 0; j < datos.length; j++) {
-                if(datos[j] >= i && datos[j] <= f){
+                if(datos[j][0] >= i && datos[j][0] <= f){
                     newData.push([datos[j][1], datos[j][2]]);
                 }
             }
@@ -458,7 +458,7 @@ function tecnico(i, f){
         chart: {
             renderTo: 'contenedor2',
             type: 'bar',
-            width: 1000,
+            width: 1100,
             height: 500
         },
         xAxis: {

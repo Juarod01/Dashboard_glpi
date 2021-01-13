@@ -61,6 +61,7 @@ SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_locations.name AS lo
 FROM glpi_950.glpi_tickets 
 INNER JOIN glpi_950.glpi_locations
 ON glpi_tickets.locations_id = glpi_locations.id
+WHERE glpi_tickets.is_deleted = 0
 group by mes, localizacion
 order by mes ASC;
 -- Cantidad de casos por técnico, agrupado por mes
@@ -70,7 +71,7 @@ INNER JOIN glpi_950.glpi_tickets_users
 ON glpi_tickets.id = glpi_tickets_users.tickets_id
 INNER JOIN glpi_950.glpi_users
 ON glpi_tickets_users.users_id = glpi_users.id
-WHERE glpi_tickets_users.type = 2
+WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0
 group by mes, nombre
 order by mes ASC;
 -- Muestra solo técnicos y admin
@@ -80,5 +81,5 @@ INNER JOIN glpi_950.glpi_tickets_users
 ON glpi_tickets.id = glpi_tickets_users.tickets_id
 INNER JOIN glpi_950.glpi_users
 ON glpi_tickets_users.users_id = glpi_users.id
-WHERE glpi_tickets_users.type = 2
+WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0
 group by nombre;

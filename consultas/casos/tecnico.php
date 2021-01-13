@@ -10,7 +10,7 @@ $nombreTecnico = $conexion->prepare('SELECT concat(glpi_users.firstname, " ", gl
                                             ON glpi_tickets.id = glpi_tickets_users.tickets_id
                                             INNER JOIN '.nombre_bd.'.glpi_users
                                             ON glpi_tickets_users.users_id = glpi_users.id
-                                            WHERE glpi_tickets_users.type = 2
+                                            WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0
                                             group by nombre');
 $nombreTecnico->execute();
 $tecnico = array();
@@ -24,7 +24,7 @@ $casosTecnicos = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%
                                     ON glpi_tickets.id = glpi_tickets_users.tickets_id
                                     INNER JOIN '.nombre_bd.'.glpi_users
                                     ON glpi_tickets_users.users_id = glpi_users.id
-                                    WHERE glpi_tickets_users.type = 2
+                                    WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0
                                     group by mes, nombre
                                     order by mes ASC');
 $casosTecnicos->execute();

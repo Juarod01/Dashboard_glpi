@@ -15,6 +15,7 @@ $localizacion = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m
                                     FROM '.nombre_bd.'.glpi_tickets
                                     INNER JOIN '.nombre_bd.'.glpi_locations
                                     ON glpi_tickets.locations_id = glpi_locations.id
+                                    WHERE glpi_tickets.is_deleted = 0
                                     group by mes, localizacion
                                     order by casos DESC');
 $localizacion->execute();
