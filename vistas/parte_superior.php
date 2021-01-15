@@ -53,6 +53,7 @@
                   <a id="" class="dropdown-item" onclick="javascript:porEstado();" style="cursor: pointer;">Por estado</a>
                   <a id="" class="dropdown-item" onclick="javascript:porTipo();" style="cursor: pointer;">Por tipo</a>
                   <a id="" class="dropdown-item" onclick="javascript:porLocalizacion();" style="cursor: pointer;">Por localización</a>
+                  <a id="" class="dropdown-item" onclick="javascript:porCategoria();" style="cursor: pointer;">Por categoría</a>
                   <a id="" class="dropdown-item" onclick="javascript:porTecnico();" style="cursor: pointer;">Por técnico</a>
                   <a id="" class="dropdown-item" onclick="javascript:porSatisfaccion();" style="cursor: pointer;">Satisfacción</a>
                 </div>

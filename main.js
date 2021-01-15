@@ -56,6 +56,15 @@ function porTecnico(){
     });
 }
 
+function porCategoria(){
+    $.post("categoria.php", function(data){
+        $("#chartPpal").css("display", "none");
+        $("#chartSdo").css("display", "block");
+        $("#chartSdo").html(data);
+        categoria(inicio, fin);
+    });
+}
+
 function index(){
     var chart1, options;
     $.ajax({
@@ -487,6 +496,100 @@ function tecnico(i, f){
         },
         series: [{
             name: 'Tecnicos',
+            data: []
+        }]
+    };
+}
+
+function categoria(i, f){
+    var chart1, options;
+    $.ajax({
+        url:"consultas/casos/categoria.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let datos = data.dataCategoria;
+            let categoria = data.Categoria;
+            let newData = [];
+            // Filtrar por el tiempo indicado
+            for (let j = 0; j < datos.length; j++) {
+                if(datos[j][0] >= i && datos[j][0] <= f){
+                    newData.push(datos[j]);
+                }
+            }
+            // Sumar cantidad de casos de categorias iguales
+            for (let j = 0; j < newData.length; j++) {
+                for (let k = 0; k < categoria.length; k++) {
+                    if (categoria[k][1] == undefined) {
+                        if (categoria[k] == newData[j][2]) {
+                            categoria[k][1] = 1;
+                        }
+                    }else{
+                        if (categoria[k][0] == newData[j][2]) {
+                            categoria[k][1] = categoria[k][1] + 1;
+                        }
+                    }
+                }
+            }
+            // Llenar categorias que no tiene cantidad de casos, con 0
+            for (let j = 0; j < categoria.length; j++) {
+                if (categoria[j][1] == undefined) {
+                    categoria[j][1] = 0;
+                }
+            }
+            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
+            categoria.sort(function(a,b) {
+                return a[1] - b[1];
+            })
+            // La funcion reverse, los deja ordenados de forma descendente
+            categoria.reverse();
+            // Retorna todas las categorias que tengan por lo menos 1 caso
+            let nuevo = categoria.map(function(data){
+                if (data[1]>0) {
+                    return data
+                }
+            })
+            console.log(nuevo)
+            console.log(categoria)
+            options.series[0].data = nuevo;
+            options.xAxis.categories = nuevo;
+
+            chart1 = new Highcharts.Chart(options);
+        }
+    });
+    options = {
+        chart: {
+            renderTo: 'contenedor2',
+            type: 'bar',
+            width: 1400,
+            height: 2000
+        },
+        xAxis: {
+            categories:[],
+        },
+        yAxis: {
+            title: {
+                    text: 'Cantidad de casos'
+            }    		
+        },
+        title: {
+            text: 'Cantidad de casos por categoría'
+        },
+        subtitle: {
+            text: ''
+        },
+        plotOptions:{
+            series:{
+                cursor:'pointer',
+                pointWidth: 20,
+                fontSize: 5,
+                dataLabels:{
+                    enabled:true,
+                }
+            },
+        },
+        series: [{
+            name: 'Categoría',
             data: []
         }]
     };
