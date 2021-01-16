@@ -93,4 +93,6 @@ INNER JOIN glpi_953.glpi_itilcategories
 ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
 INNER JOIN glpi_slas
 ON glpi_tickets.slas_id_ttr = glpi_slas.id
-WHERE glpi_tickets.is_deleted = 0;
+WHERE glpi_tickets.is_deleted = 0 AND glpi_slas.name = "Análisis Requerimiento"
+	AND year(glpi_tickets.date) = "2020" AND month(glpi_tickets.date) >= 1
+    AND glpi_tickets.type = 1;

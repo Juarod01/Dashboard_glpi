@@ -19,6 +19,13 @@
     <div class="row mt-4 mb-5">
         <!--En este container se muestran los gráficos-->
         <div id="contenedor2" class="m-auto"></div>
+        <!-- En este contenedor se muestra la tabla de datos -->
+        <div id="contenedor_tabla" class="m-auto">
+            <h5 class="text-center">Tabla de adaptabilidad a SLA</h5>
+            <table id="categoriaSla" class="display" width="90%"></table>
+            <h5 class="text-center mt-4">Tabla descriptiva de casos con categoria y SLA</h5>
+            <table id="categoria" class="display" width="90%"></table>
+        </div>
     </div>
 
 </div>
@@ -28,5 +35,15 @@ $("#filtrarCategoria").click(function(){
     let inicio1 = $("#fecha1").val()
     let fin1 = $("#fecha2").val()
     categoria(inicio1, fin1)
+
+    table1 = $('#categoriaSla').DataTable()
+    table1.destroy();
+    $('#categoriaSla').empty();
+
+    table = $('#categoria').DataTable()
+    table.destroy();
+    $('#categoria').empty();
+
+    tablaCategoria(inicio1, fin1)
 });
 </script>

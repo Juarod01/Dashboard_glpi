@@ -19,7 +19,9 @@
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
  
   <!-- datatables JS -->
-  <script type="text/javascript" src="vendor/datatables/datatables.min.js"></script>    
+  <!-- <script type="text/javascript" src="vendor/datatables/datatables.min.js"></script>     -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>   
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>   
   <!-- Highcharts JS -->              
   <script src="vendor/Highcharts_7.0.3/code/highcharts.js"></script>
   <script src="vendor/Highcharts_7.0.3/code/modules/exporting.js"></script>

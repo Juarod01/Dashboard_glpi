@@ -62,6 +62,7 @@ function porCategoria(){
         $("#chartSdo").css("display", "block");
         $("#chartSdo").html(data);
         categoria(inicio, fin);
+        tablaCategoria(inicio, fin);
     });
 }
 
@@ -548,9 +549,10 @@ function categoria(i, f){
                 if (data[1]>0) {
                     return data
                 }
-            })
-            console.log(nuevo)
-            console.log(categoria)
+            }).slice(0,15)
+            // Extrae los primeros 15 elementos del array
+            // nuevo.slice(0,15)
+
             options.series[0].data = nuevo;
             options.xAxis.categories = nuevo;
 
@@ -562,7 +564,7 @@ function categoria(i, f){
             renderTo: 'contenedor2',
             type: 'bar',
             width: 1400,
-            height: 2000
+            height: 500
         },
         xAxis: {
             categories:[],
@@ -576,7 +578,7 @@ function categoria(i, f){
             text: 'Cantidad de casos por categoría'
         },
         subtitle: {
-            text: ''
+            text: 'Top 15 de las categorías con mas casos'
         },
         plotOptions:{
             series:{
@@ -593,4 +595,104 @@ function categoria(i, f){
             data: []
         }]
     };
+}
+
+function tablaCategoria(i, f){
+    $.ajax({
+        url:"consultas/tablas_casos/categoria.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let dataSet = data.dataCategoria;
+            let categoria = data.Categoria;
+            let newData = [];
+            // Filtrar por el tiempo indicado
+            for (let j = 0; j < dataSet.length; j++) {
+                if(dataSet[j][0] >= i && dataSet[j][0] <= f){
+                    newData.push(dataSet[j]);
+                }
+            }
+            // Sumar cantidad de casos de categorias iguales y cuenta las categorias que cumplen con el sla
+            for (let j = 0; j < newData.length; j++) {
+                for (let k = 0; k < categoria.length; k++) {
+                    if (categoria[k][1] == undefined) {
+                        if (categoria[k] == newData[j][2]) {
+                            categoria[k][1] = 1;
+                            if (newData[j][6] === "cumple") {
+                                categoria[k][2] = 1;
+                            }
+                        }
+                    }else{
+                        if (categoria[k][0] == newData[j][2]) {
+                            categoria[k][1] = categoria[k][1] + 1;
+                            if (categoria[k][2] == undefined) {
+                                if (newData[j][6] === "cumple") {
+                                    categoria[k][2] = 1;
+                                }
+                            }else{
+                                if (newData[j][6] === "cumple") {
+                                    categoria[k][2] = categoria[k][2] + 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Llenar categorias que no tiene cantidad de casos, con 0
+            for (let j = 0; j < categoria.length; j++) {
+                if (categoria[j][1] == undefined) {
+                    categoria[j][1] = 0;
+                } 
+                if(categoria[j][2] == undefined){
+                    categoria[j][2] = 0;
+                }
+            }
+            // Llena porcentaje
+            for (let j = 0; j < categoria.length; j++) {
+                if (categoria[j][1] != 0) {
+                    categoria[j][3] = Math.round((categoria[j][2] / categoria[j][1])*100, -1) + "%";
+                }else{
+                    categoria[j][3] = 0;
+                }
+            }
+            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
+            categoria.sort(function(a,b) {
+                return a[1] - b[1];
+            })
+            // La funcion reverse, los deja ordenados de forma descendente
+            categoria.reverse();
+
+            console.log(categoria);
+
+            $(document).ready(function() {
+                $('#categoriaSla').DataTable( {
+                    data: categoria,
+                    columns: [
+                        { title: "Categoría" },
+                        { title: "Cantidad de casos" },
+                        { title: "Casos que cumplen SLA" },
+                        { title: "Procentaje" },
+                    ],
+                    order: [[ 1, "desc" ]]
+                } );
+            } );
+            
+            $(document).ready(function() {
+                $('#categoria').DataTable( {
+                    data: newData,
+                    columns: [
+                        { title: "Mes" },
+                        { title: "Id" },
+                        { title: "Categoría" },
+                        { title: "Sla" },
+                        { title: "Tiempo sla (horas)" },
+                        { title: "Tiempo solucionado (horas)" },
+                        { title: "Criterio" },
+                        { title: "Estado" },
+                    ]
+                } );
+            } );
+        }
+    });
+
 }
