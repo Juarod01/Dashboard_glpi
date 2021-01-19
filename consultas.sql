@@ -10,6 +10,31 @@ SELECT month(date) as meses, count(id) as casos FROM glpi_953.glpi_tickets WHERE
 SELECT month(date) as abiertos, count(id) as casos FROM glpi_953.glpi_tickets WHERE year(date) = 2020 group by abiertos;
 -- Mes y cantidad de casos cerrados, filtrado por año y agrupado por mes
 SELECT month(closedate) as cerrados, count(id) as casos FROM glpi_953.glpi_tickets WHERE year(closedate) = 2020 group by cerrados;
+-- para tickets del mes
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, count(id) as casos 
+FROM glpi_953.glpi_tickets
+where is_deleted = 0
+group by mes;
+-- para tickets del mes, estado en espera
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, count(id) as casos 
+FROM glpi_953.glpi_tickets
+where status = 4 and is_deleted = 0
+group by mes;
+-- para tickets del mes, con estados nuevos y asignados
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, count(id) as casos 
+FROM glpi_953.glpi_tickets
+where status = 2 OR status = 1 AND is_deleted = 0
+group by mes;
+-- para tickets del mes, estado resueltos
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, count(id) as casos 
+FROM glpi_953.glpi_tickets
+where status = 5 and is_deleted = 0
+group by mes;
+-- para tickets del mes, estado cerrados
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, count(id) as casos 
+FROM glpi_953.glpi_tickets
+where status = 6 and is_deleted = 0
+group by mes;
 -- Mes - año y cantidad de casos abiertos, agrupado por mes y ordenados por año y mes
 SELECT DATE_FORMAT(date, "%M %Y") AS mes, count(id) as casos FROM glpi_953.glpi_tickets 
 group by mes 
@@ -63,7 +88,18 @@ INNER JOIN glpi_953.glpi_locations
 ON glpi_tickets.locations_id = glpi_locations.id
 WHERE glpi_tickets.is_deleted = 0
 group by mes, localizacion
-order by mes ASC;
+order by casos DESC;
+-- Cantidad de casos por localización-categoria, agrupado por mes
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_locations.name AS localizacion,
+	glpi_itilcategories.completename AS categoria, count(glpi_tickets.id) as casos 
+FROM glpi_953.glpi_tickets
+INNER JOIN glpi_953.glpi_locations
+ON glpi_tickets.locations_id = glpi_locations.id
+INNER JOIN glpi_953.glpi_itilcategories
+ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
+WHERE glpi_tickets.is_deleted = 0 
+group by mes, localizacion, categoria
+order by mes DESC;
 -- Cantidad de casos por técnico, agrupado por mes
 SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, concat(glpi_users.firstname, " ", glpi_users.realname, " (", glpi_users.name, ")") AS nombre, count(glpi_tickets.id) as casos 
 FROM glpi_953.glpi_tickets 

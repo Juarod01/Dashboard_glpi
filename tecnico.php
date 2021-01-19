@@ -28,5 +28,8 @@ $("#filtrarTecnico").click(function(){
     let inicio1 = $("#fecha1").val()
     let fin1 = $("#fecha2").val()
     tecnico(inicio1, fin1)
+
+    console.log(inicio1)
+    console.log(fin1)
 });
 </script>

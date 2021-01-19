@@ -23,10 +23,16 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>   
   <script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>   
   <!-- Highcharts JS -->              
-  <script src="vendor/Highcharts_7.0.3/code/highcharts.js"></script>
+  <!-- <script src="vendor/Highcharts_7.0.3/code/highcharts.js"></script>
   <script src="vendor/Highcharts_7.0.3/code/modules/exporting.js"></script>
   <script src="vendor/Highcharts_7.0.3/code/modules/export-data.js"></script> 
-  <script src="vendor/Highcharts_7.0.3/code/modules/drilldown.js"></script>
+  <script src="vendor/Highcharts_7.0.3/code/modules/drilldown.js"></script> -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
   <!-- código propio JS --> 
   <script type="text/javascript" src="main.js"></script>
 

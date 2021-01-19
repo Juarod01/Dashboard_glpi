@@ -90,7 +90,7 @@ function index(){
             text: 'Evolución de casos'
         },
         xAxis:{
-            categories:['0', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+            type: 'category'
         },
         yAxis:{
             title:{
@@ -110,18 +110,7 @@ function index(){
                 pointStart: 0
             }
         },
-        series:
-        [
-            {
-            // name:'2019',
-            // data:[]
-        },{
-            // name:'2020',
-            // data:[]
-        },{
-
-        }
-    ],     
+        series: [{},{},{}]
     }
 }
 
@@ -335,33 +324,34 @@ function localizacion(i, f){
             let newData = [];
             // Filtrar por el tiempo indicado
             for (let j = 0; j < datos.length; j++) {
-                if(datos[j][0] >= i && datos[j][0] <= f){
-                    newData.push([datos[j][1], datos[j][2]]);
+                if(datos[j].fecha >= i && datos[j].fecha <= f){
+                    x = {name: datos[j].localizacion, y: datos[j].casos, drilldown: datos[j].localizacion}
+                    newData.push(x);
                 }
             }
             // Sumar cantidad de casos de localizaciones iguales
             for (let j = 0; j < newData.length; j++) {
                 for (let k = 0; k < areas.length; k++) {
-                    if (areas[k][1] == undefined) {
-                        if (areas[k] == newData[j][0]) {
-                            areas[k][1] = newData[j][1];
+                    if (areas[k].y == undefined) {
+                        if (areas[k].name == newData[j].name) {
+                            areas[k].y = newData[j].y;
                         }
                     }else{
-                        if (areas[k][0] == newData[j][0]) {
-                            areas[k][1] = areas[k][1] + newData[j][1];
+                        if (areas[k].name == newData[j].name) {
+                            areas[k].y = areas[k].y + newData[j].y;
                         }
                     }
                 }
             }
             // Llenar localizaciones que no tiene cantidad de casos, con 0
             for (let j = 0; j < areas.length; j++) {
-                if (areas[j][1] == undefined) {
-                    areas[j][1] = 0;
+                if (areas[j].y == undefined) {
+                    areas[j].y = 0;
                 }
             }
             // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
             areas.sort(function(a,b) {
-                return a[1] - b[1];
+                return a.y - b.y;
             })
             // La funcion reverse, los deja ordenados de forma descendente
             areas.reverse();
@@ -369,8 +359,6 @@ function localizacion(i, f){
             let nuevo = areas.slice(0,15)
 
             options.series[0].data = nuevo;
-            options.xAxis.categories = nuevo;
-
             chart1 = new Highcharts.Chart(options);
         }
     });
@@ -382,7 +370,7 @@ function localizacion(i, f){
             height: 500
         },
         xAxis: {
-            categories:[],
+            type: 'category'
         },
         yAxis: {
             title: {
@@ -454,9 +442,6 @@ function tecnico(i, f){
             })
             // La funcion reverse, los deja ordenados de forma descendente
             tecnico.reverse();
-            // Extrae los primeros 15 elementos del array
-            // let nuevo = tecnico.slice(0,15)
-            // console.log(nuevo)
 
             options.series[0].data = tecnico;
             options.xAxis.categories = tecnico;
@@ -662,7 +647,7 @@ function tablaCategoria(i, f){
             // La funcion reverse, los deja ordenados de forma descendente
             categoria.reverse();
 
-            console.log(categoria);
+            // console.log(categoria);
 
             $(document).ready(function() {
                 $('#categoriaSla').DataTable( {

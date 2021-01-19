@@ -45,5 +45,8 @@ $("#filtrarCategoria").click(function(){
     $('#categoria').empty();
 
     tablaCategoria(inicio1, fin1)
+
+    console.log(inicio1)
+    console.log(fin1)
 });
 </script>

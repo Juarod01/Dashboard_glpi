@@ -28,5 +28,8 @@ $("#filtrarSatisfaccion").click(function(){
     let inicio1 = $("#fecha1").val()
     let fin1 = $("#fecha2").val()
     satisfaccion(inicio1, fin1)
+
+    console.log(inicio1)
+    console.log(fin1)
 });
 </script>
