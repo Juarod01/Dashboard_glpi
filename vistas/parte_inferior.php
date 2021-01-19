@@ -12,21 +12,16 @@
     <!-- End of Footer -->
 
   <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/Bootstrap_4/js/bootstrap.min.js"></script>  
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
  
   <!-- datatables JS -->
-  <!-- <script type="text/javascript" src="vendor/datatables/datatables.min.js"></script>     -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>   
   <script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>   
   <!-- Highcharts JS -->              
-  <!-- <script src="vendor/Highcharts_7.0.3/code/highcharts.js"></script>
-  <script src="vendor/Highcharts_7.0.3/code/modules/exporting.js"></script>
-  <script src="vendor/Highcharts_7.0.3/code/modules/export-data.js"></script> 
-  <script src="vendor/Highcharts_7.0.3/code/modules/drilldown.js"></script> -->
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/data.js"></script>
   <script src="https://code.highcharts.com/modules/drilldown.js"></script>
