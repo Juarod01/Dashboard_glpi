@@ -119,6 +119,33 @@ INNER JOIN glpi_953.glpi_users
 ON glpi_tickets_users.users_id = glpi_users.id
 WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0
 group by nombre;
+
+-- Actualizar SLA´s
+UPDATE `glpi_953`.`glpi_tickets` SET `slas_id_ttr` = '36' WHERE (`slas_id_ttr` = '28');
+
+
+-- TABLAS
+
+-- año-mes, lista todos los id's que son incidencias
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.name as titulo, glpi_tickets.id as id, "Incidencia", glpi_tickets.status as estado
+FROM glpi_953.glpi_tickets 
+WHERE type = 1;
+-- año-mes, lista todos los id's que son requerimientos
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.name as titulo, glpi_tickets.id as id, "Requerimiento", glpi_tickets.status as estado
+FROM glpi_953.glpi_tickets 
+WHERE type = 2;
+-- año-mes, lista todos los id's que son problemas
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.name as titulo, glpi_tickets.id as id, "Problema", glpi_tickets.status as estado
+FROM glpi_953.glpi_tickets
+INNER JOIN glpi_problems_tickets
+ON glpi_tickets.id = glpi_problems_tickets.tickets_id;
+-- año-mes, lista todos los id's y su respectiva localización
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.name as titulo, glpi_tickets.id as id, 
+	glpi_locations.completename as name, glpi_tickets.status as estado
+	FROM glpi_953.glpi_tickets
+	INNER JOIN glpi_locations
+	ON glpi_tickets.locations_id = glpi_locations.id;
+
 -- Muestra por cada caso la categoria a la que pertenece, el nombre del sla, y si lo cumple o no
 SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, 
 	glpi_itilcategories.completename AS categoria, 
@@ -132,3 +159,5 @@ ON glpi_tickets.slas_id_ttr = glpi_slas.id
 WHERE glpi_tickets.is_deleted = 0 AND glpi_slas.name = "Análisis Requerimiento"
 	AND year(glpi_tickets.date) = "2020" AND month(glpi_tickets.date) >= 1
     AND glpi_tickets.type = 1;
+
+

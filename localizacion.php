@@ -19,6 +19,11 @@
     <div class="row mt-4 mb-5">
         <!--En este container se muestran los gráficos-->
         <div id="contenedor2" class="m-auto"></div>
+        <!-- En este contenedor se muestra la tabla de datos -->
+        <div class="m-auto">
+            <h5 class="text-center">Tabla de casos por localización</h5>
+            <table id="casosLocalizacion" class="display" width="95%"></table>
+        </div>
     </div>
 
 </div>
@@ -29,7 +34,10 @@ $("#filtrarLocalizacion").click(function(){
     let fin = document.getElementById("fin1").value
     localizacion(inicio, fin)
 
-    console.log(inicio)
-    console.log(fin)
+    table = $('#casosLocalizacion').DataTable()
+    table.destroy();
+    $('#casosLocalizacion').empty();
+
+    tablaLocalizacion(inicio, fin)
 });
 </script>

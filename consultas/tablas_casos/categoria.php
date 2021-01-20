@@ -34,6 +34,24 @@ while ($fila = $consulta->fetch(PDO::FETCH_ASSOC)){
         $fila["time_solved"], $fila["criterio"], $fila["status"]));
 }
 
+for ($i=0; $i < count($categoriaSla); $i++) { 
+    if($categoriaSla[$i][7] == 1){
+        $categoriaSla[$i][7] = "Nuevo";
+    }
+    else if($categoriaSla[$i][7] == 2){
+        $categoriaSla[$i][7] = "Asignado";
+    }
+    else if($categoriaSla[$i][7] == 4){
+        $categoriaSla[$i][7] = "En espera";
+    }
+    else if($categoriaSla[$i][7] == 5){
+        $categoriaSla[$i][7] = "Solucionado";
+    }
+    else if($categoriaSla[$i][7] == 6){
+        $categoriaSla[$i][7] = "Cerrado";
+    }
+}
+
 $final = ["dataCategoria" => $categoriaSla,  "Categoria" => $nombreCategoria];
 
 print json_encode($final, JSON_NUMERIC_CHECK);

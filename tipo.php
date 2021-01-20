@@ -39,8 +39,5 @@ $("#filtrarTipo").click(function(){
     $('#casosTipo').empty();
 
     tablaTipo(inicio1, fin1)
-
-    console.log(inicio1)
-    console.log(fin1)
 });
 </script>

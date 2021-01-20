@@ -45,6 +45,7 @@ function porLocalizacion(){
         $("#chartSdo").css("display", "block");
         $("#chartSdo").html(data);
         localizacion(inicio, fin);
+        tablaLocalizacion(inicio, fin);
     });
 }
 
@@ -666,16 +667,20 @@ function tablaCategoria(i, f){
             $(document).ready(function() {
                 $('#categoria').DataTable( {
                     data: newData,
+                    dom: 'Plfrtip',
                     columns: [
                         { title: "Mes" },
                         { title: "Id" },
                         { title: "Categoría" },
-                        { title: "Sla" },
+                        { title: "SLA" },
                         { title: "Tiempo sla (horas)" },
                         { title: "Tiempo solucionado (horas)" },
                         { title: "Criterio" },
                         { title: "Estado" },
-                    ]
+                    ],
+                    searchPanes: {
+                        order: ['Estado', 'Categoría', 'Criterio']
+                    },
                 } );
             } );
         }
@@ -698,8 +703,6 @@ function tablaTipo(i, f){
                 }
             }
 
-            console.log(newData);
-
             $(document).ready(function() {
                 $('#casosTipo').DataTable( {
                     dom: 'Plfrtip',
@@ -709,6 +712,40 @@ function tablaTipo(i, f){
                         { title: "Titulo" },
                         { title: "Id" },
                         { title: "Tipo" },
+                        { title: "Estado" },
+                    ]
+                } );
+            } );
+            
+        }
+    });
+
+}
+
+function tablaLocalizacion(i, f){
+    $.ajax({
+        url:"consultas/tablas_casos/localizacion.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let dataSet = data.localizacion;
+            let newData = [];
+            // Filtrar por el tiempo indicado
+            for (let j = 0; j < dataSet.length; j++) {
+                if(dataSet[j][0] >= i && dataSet[j][0] <= f){
+                    newData.push(dataSet[j]);
+                }
+            }
+
+            $(document).ready(function() {
+                $('#casosLocalizacion').DataTable( {
+                    dom: 'Plfrtip',
+                    data: newData,
+                    columns: [
+                        { title: "Mes" },
+                        { title: "Titulo" },
+                        { title: "Id" },
+                        { title: "Localización" },
                         { title: "Estado" },
                     ]
                 } );
