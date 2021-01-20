@@ -20,7 +20,7 @@
         <!--En este container se muestran los gráficos-->
         <div id="contenedor2" class="m-auto"></div>
         <!-- En este contenedor se muestra la tabla de datos -->
-        <div id="contenedor_tabla" class="m-auto">
+        <div class="m-auto">
             <h5 class="text-center">Tabla de adaptabilidad a SLA</h5>
             <table id="categoriaSla" class="display" width="90%"></table>
             <h5 class="text-center mt-4">Tabla descriptiva de casos con categoria y SLA</h5>

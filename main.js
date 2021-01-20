@@ -26,6 +26,7 @@ function porTipo(){
         $("#chartSdo").css("display", "block");
         $("#chartSdo").html(data);
         tipo(inicio, fin);
+        tablaTipo(inicio, fin);
     });
 }
 
@@ -647,7 +648,7 @@ function tablaCategoria(i, f){
             // La funcion reverse, los deja ordenados de forma descendente
             categoria.reverse();
 
-            // console.log(categoria);
+            console.log(categoria);
 
             $(document).ready(function() {
                 $('#categoriaSla').DataTable( {
@@ -677,6 +678,42 @@ function tablaCategoria(i, f){
                     ]
                 } );
             } );
+        }
+    });
+
+}
+
+function tablaTipo(i, f){
+    $.ajax({
+        url:"consultas/tablas_casos/tipo.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let dataSet = data.datosPorTipo;
+            let newData = [];
+            // Filtrar por el tiempo indicado
+            for (let j = 0; j < dataSet.length; j++) {
+                if(dataSet[j][0] >= i && dataSet[j][0] <= f){
+                    newData.push(dataSet[j]);
+                }
+            }
+
+            console.log(newData);
+
+            $(document).ready(function() {
+                $('#casosTipo').DataTable( {
+                    dom: 'Plfrtip',
+                    data: newData,
+                    columns: [
+                        { title: "Mes" },
+                        { title: "Titulo" },
+                        { title: "Id" },
+                        { title: "Tipo" },
+                        { title: "Estado" },
+                    ]
+                } );
+            } );
+            
         }
     });
 

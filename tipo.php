@@ -19,6 +19,11 @@
     <div class="row mt-4 mb-5">
         <!--En este container se muestran los gráficos-->
         <div id="contenedor2" class="m-auto"></div>
+        <!-- En este contenedor se muestra la tabla de datos -->
+        <div class="m-auto">
+            <h5 class="text-center">Tabla de casos por tipo</h5>
+            <table id="casosTipo" class="display" width="95%"></table>
+        </div>
     </div>
 
 </div>
@@ -28,6 +33,12 @@ $("#filtrarTipo").click(function(){
     let inicio1 = $("#fecha1").val()
     let fin1 = $("#fecha2").val()
     tipo(inicio1, fin1)
+
+    table = $('#casosTipo').DataTable()
+    table.destroy();
+    $('#casosTipo').empty();
+
+    tablaTipo(inicio1, fin1)
 
     console.log(inicio1)
     console.log(fin1)
