@@ -140,11 +140,21 @@ FROM glpi_953.glpi_tickets
 INNER JOIN glpi_problems_tickets
 ON glpi_tickets.id = glpi_problems_tickets.tickets_id;
 -- año-mes, lista todos los id's y su respectiva localización
-SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.name as titulo, glpi_tickets.id as id, 
-	glpi_locations.completename as name, glpi_tickets.status as estado
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, 
+	glpi_locations.completename as name, 
+    if(glpi_tickets.status = 1 OR glpi_tickets.status = 2 OR glpi_tickets.status = 4, "1", "0") as Abiertos,
+    if(glpi_tickets.status = 5, "1", "0") as Solucionado,
+    if(glpi_tickets.status = 6, "1", "0") as Cerrado
 	FROM glpi_953.glpi_tickets
 	INNER JOIN glpi_locations
 	ON glpi_tickets.locations_id = glpi_locations.id;
+-- año-mes, cantidad de id's por localización, agrupados por mes
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_locations.completename as localizacion, count(glpi_tickets.id) as id 
+	FROM glpi_953.glpi_tickets
+	INNER JOIN glpi_locations
+	ON glpi_tickets.locations_id = glpi_locations.id
+    group by mes, localizacion
+    order by mes;
 
 -- Muestra por cada caso la categoria a la que pertenece, el nombre del sla, y si lo cumple o no
 SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, 
@@ -160,4 +170,26 @@ WHERE glpi_tickets.is_deleted = 0 AND glpi_slas.name = "Análisis Requerimiento"
 	AND year(glpi_tickets.date) = "2020" AND month(glpi_tickets.date) >= 1
     AND glpi_tickets.type = 1;
 
+-- año-mes, lista todos los id's y su respectiva técnico
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, 
+	glpi_locations.completename as name, 
+    if(glpi_tickets.status = 1 OR glpi_tickets.status = 2 OR glpi_tickets.status = 4, "1", "0") as Abiertos,
+    if(glpi_tickets.status = 5, "1", "0") as Solucionado,
+    if(glpi_tickets.status = 6, "1", "0") as Cerrado
+	FROM glpi_953.glpi_tickets
+	INNER JOIN glpi_locations
+	ON glpi_tickets.locations_id = glpi_locations.id;
 
+-- Muestra solo técnicos y admin
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, 
+	concat(glpi_users.firstname, " ", glpi_users.realname, " (", glpi_users.name, ")") AS nombre, 
+    if(glpi_tickets.status = 1 OR glpi_tickets.status = 2, "1", "0") as Abiertos,
+    if(glpi_tickets.status = 4, "1", "0") as EnEspera,
+    if(glpi_tickets.status = 5, "1", "0") as Solucionado,
+    if(glpi_tickets.status = 6, "1", "0") as Cerrado
+	FROM glpi_953.glpi_tickets 
+	INNER JOIN glpi_953.glpi_tickets_users
+	ON glpi_tickets.id = glpi_tickets_users.tickets_id
+	INNER JOIN glpi_953.glpi_users
+	ON glpi_tickets_users.users_id = glpi_users.id
+	WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0;

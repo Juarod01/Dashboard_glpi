@@ -22,9 +22,9 @@
         <!-- En este contenedor se muestra la tabla de datos -->
         <div class="m-auto">
             <h5 class="text-center">Tabla de adaptabilidad a SLA</h5>
-            <table id="categoriaSla" class="display" width="90%"></table>
+            <table id="categoriaSla" class="display"></table>
             <h5 class="text-center mt-4">Tabla descriptiva de casos con categoria y SLA</h5>
-            <table id="categoria" class="display" width="90%"></table>
+            <table id="categoria" class="display"></table>
         </div>
     </div>
 
