@@ -729,25 +729,61 @@ function tablaLocalizacion(i, f){
         dataType:"json",
         success:function(data){
             let dataSet = data.localizacion;
-            let newData = [];
             // Filtrar por el tiempo indicado
-            for (let j = 0; j < dataSet.length; j++) {
-                if(dataSet[j][0] >= i && dataSet[j][0] <= f){
-                    newData.push(dataSet[j]);
+            let newData = dataSet.filter(registro => registro[0] >= i && registro[0] <= f)
+            .map(function(registro){
+                return {name: registro[2], casos: 1, abierto: registro[3], solucionado: registro[4], cerrado: registro[5]}
+            });
+
+            const sumatoria = newData.reduce((acumulador, valorActual) => {
+                const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
+                if (yaExiste) {
+                    return acumulador.map((elemento)=>{
+                        if (elemento.name === valorActual.name) {
+                            let name = elemento.name
+                            let casos = elemento.casos + valorActual.casos
+                            let abierto = elemento.abierto + valorActual.abierto
+                            let solucionado = elemento.solucionado + valorActual.solucionado
+                            let cerrado = elemento.cerrado + valorActual.cerrado
+                            return { name, casos, abierto, solucionado, cerrado }
+                        }
+                        return elemento;
+                    });
                 }
-            }
+                return [...acumulador, valorActual]
+            }, []);
+
+            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente, posterior se realiza reserse
+            sumatoria.sort(function(a,b) {
+                return a.casos - b.casos;
+            })
+            .reverse();
+
+            let dataFinal = sumatoria.map(function(registro){
+                let porcentaje = Math.round((registro.cerrado / registro.casos)*100, -1) + "%"
+                return [
+                    registro.name,
+                    registro.casos,
+                    registro.abierto,
+                    registro.solucionado,
+                    registro.cerrado,
+                    porcentaje
+                ]
+            });
 
             $(document).ready(function() {
                 $('#casosLocalizacion').DataTable( {
-                    dom: 'Plfrtip',
-                    data: newData,
+                    // dom: 'Plfrtip',
+                    data: dataFinal,
                     columns: [
-                        { title: "Mes" },
-                        { title: "Titulo" },
-                        { title: "Id" },
                         { title: "Localización" },
-                        { title: "Estado" },
-                    ]
+                        { title: "Casos" },
+                        { title: "Abiertos" },
+                        { title: "Solucionados" },
+                        { title: "Cerrados" },
+                        { title: "Porcentaje" },
+                    ],
+                    order: [[ 1, "desc" ]]
                 } );
             } );
             
