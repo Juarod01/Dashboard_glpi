@@ -19,6 +19,11 @@
     <div class="row mt-4 mb-5">
         <!--En este container se muestran los gráficos-->
         <div id="contenedor2" class="m-auto"></div>
+        <!-- En este contenedor se muestra la tabla de datos -->
+        <div class="m-auto">
+            <h5 class="text-center">Tabla de casos por técnico</h5>
+            <table id="casosSatisfaccion" class="display" width="100%"></table>
+        </div>
     </div>
 
 </div>
@@ -29,7 +34,10 @@ $("#filtrarSatisfaccion").click(function(){
     let fin1 = $("#fecha2").val()
     satisfaccion(inicio1, fin1)
 
-    console.log(inicio1)
-    console.log(fin1)
+    table = $('#casosSatisfaccion').DataTable()
+    table.destroy();
+    $('#casosSatisfaccion').empty();
+
+    tablaSatisfaccion(inicio, fin)
 });
 </script>

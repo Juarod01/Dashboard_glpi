@@ -36,6 +36,7 @@ function porSatisfaccion(){
         $("#chartSdo").css("display", "block");
         $("#chartSdo").html(data);
         satisfaccion(inicio, fin);
+        tablaSatisfaccion(inicio, fin);
     });
 }
 
@@ -807,6 +808,56 @@ function tablaTecnico(i, f){
                         { title: "Porcentaje" },
                     ],
                     order: [[ 1, "desc" ]]
+                } );
+            } );
+            
+        }
+    });
+
+}
+
+function tablaSatisfaccion(i, f){
+    $.ajax({
+        url:"consultas/tablas_casos/satisfaccion.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let dataSet = data.satisfaccion;
+            // Filtrar por el tiempo indicado
+            let newData = dataSet.filter(registro => registro[4] >= i && registro[4] <= f)
+            .map(function(registro){
+                return [
+                        ticket= registro[0], 
+                        titulo= registro[1], 
+                        solicitante= registro[2], 
+                        tecnico= registro[3], 
+                        abierto= registro[4], 
+                        cerrado= registro[5],
+                        satisfaccion= registro[6]
+                ]
+            });
+            console.log(newData)
+
+            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente, posterior se realiza reserse
+            // sumatoria.sort(function(a,b) {
+            //     return a.casos - b.casos;
+            // })
+            // .reverse();
+
+            $(document).ready(function() {
+                $('#casosSatisfaccion').DataTable( {
+                    // dom: 'Plfrtip',
+                    data: newData,
+                    columns: [
+                        { title: "Ticket" },
+                        { title: "Título" },
+                        { title: "Solicitante" },
+                        { title: "Técnico" },
+                        { title: "Abierto" },
+                        { title: "Cerrado" },
+                        { title: "Satisfacción" },
+                    ],
+                    // order: [[ 1, "desc" ]]
                 } );
             } );
             
