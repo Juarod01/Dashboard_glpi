@@ -166,9 +166,7 @@ INNER JOIN glpi_953.glpi_itilcategories
 ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
 INNER JOIN glpi_slas
 ON glpi_tickets.slas_id_ttr = glpi_slas.id
-WHERE glpi_tickets.is_deleted = 0 AND glpi_slas.name = "Análisis Requerimiento"
-	AND year(glpi_tickets.date) = "2020" AND month(glpi_tickets.date) >= 1
-    AND glpi_tickets.type = 1;
+WHERE glpi_tickets.is_deleted = 0;
 
 -- año-mes, lista todos los id's y su respectiva técnico
 SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, 
@@ -193,3 +191,5 @@ SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id,
 	INNER JOIN glpi_953.glpi_users
 	ON glpi_tickets_users.users_id = glpi_users.id
 	WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0;
+    
+    

@@ -323,45 +323,32 @@ function localizacion(i, f){
         dataType:"json",
         success:function(data){
             let datos = data.localizacion;
-            let areas = data.areas;
-            let newData = [];
-            // Filtrar por el tiempo indicado
-            for (let j = 0; j < datos.length; j++) {
-                if(datos[j].fecha >= i && datos[j].fecha <= f){
-                    x = {name: datos[j].localizacion, y: datos[j].casos, drilldown: datos[j].localizacion}
-                    newData.push(x);
-                }
-            }
-            // Sumar cantidad de casos de localizaciones iguales
-            for (let j = 0; j < newData.length; j++) {
-                for (let k = 0; k < areas.length; k++) {
-                    if (areas[k].y == undefined) {
-                        if (areas[k].name == newData[j].name) {
-                            areas[k].y = newData[j].y;
+            let newData = datos.filter(registro => registro.fecha >= i && registro.fecha <= f)
+            .map(function(registro){
+                return {name: registro.localizacion, y: registro.casos}
+            });
+
+            const sumatoria = newData.reduce((acumulador, valorActual) => {
+                const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
+                if (yaExiste) {
+                    return acumulador.map((elemento)=>{
+                        if (elemento.name === valorActual.name) {
+                            let name = elemento.name
+                            let y = elemento.y + valorActual.y
+                            return { name, y }
                         }
-                    }else{
-                        if (areas[k].name == newData[j].name) {
-                            areas[k].y = areas[k].y + newData[j].y;
-                        }
-                    }
+                        return elemento;
+                    });
                 }
-            }
-            // Llenar localizaciones que no tiene cantidad de casos, con 0
-            for (let j = 0; j < areas.length; j++) {
-                if (areas[j].y == undefined) {
-                    areas[j].y = 0;
-                }
-            }
-            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
-            areas.sort(function(a,b) {
+                return [...acumulador, valorActual]
+            }, []);
+            sumatoria.sort(function(a,b) {
                 return a.y - b.y;
             })
-            // La funcion reverse, los deja ordenados de forma descendente
-            areas.reverse();
-            // Extrae los primeros 15 elementos del array
-            let nuevo = areas.slice(0,15)
-
-            options.series[0].data = nuevo;
+            .reverse()
+            let dataReducida = sumatoria.slice(0,15);
+            
+            options.series[0].data = dataReducida;
             chart1 = new Highcharts.Chart(options);
         }
     });
@@ -411,44 +398,31 @@ function tecnico(i, f){
         dataType:"json",
         success:function(data){
             let datos = data.casosTecnicos;
-            let tecnico = data.tecnico;
-            let newData = [];
-            // Filtrar por el tiempo indicado
-            for (let j = 0; j < datos.length; j++) {
-                if(datos[j][0] >= i && datos[j][0] <= f){
-                    newData.push([datos[j][1], datos[j][2]]);
-                }
-            }
-            // Sumar cantidad de casos de localizaciones iguales
-            for (let j = 0; j < newData.length; j++) {
-                for (let k = 0; k < tecnico.length; k++) {
-                    if (tecnico[k][1] == undefined) {
-                        if (tecnico[k] == newData[j][0]) {
-                            tecnico[k][1] = newData[j][1];
+            let newData = datos.filter(registro => registro[0] >= i && registro[0] <= f)
+            .map(function(registro){
+                return {name: registro[1], y: registro[2]}
+            });
+
+            const sumatoria = newData.reduce((acumulador, valorActual) => {
+                const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
+                if (yaExiste) {
+                    return acumulador.map((elemento)=>{
+                        if (elemento.name === valorActual.name) {
+                            let name = elemento.name
+                            let y = elemento.y + valorActual.y
+                            return { name, y }
                         }
-                    }else{
-                        if (tecnico[k][0] == newData[j][0]) {
-                            tecnico[k][1] = tecnico[k][1] + newData[j][1];
-                        }
-                    }
+                        return elemento;
+                    });
                 }
-            }
-            // Llenar localizaciones que no tiene cantidad de casos, con 0
-            for (let j = 0; j < tecnico.length; j++) {
-                if (tecnico[j][1] == undefined) {
-                    tecnico[j][1] = 0;
-                }
-            }
-            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
-            tecnico.sort(function(a,b) {
-                return a[1] - b[1];
+                return [...acumulador, valorActual]
+            }, []);
+            sumatoria.sort(function(a,b) {
+                return a.y - b.y;
             })
-            // La funcion reverse, los deja ordenados de forma descendente
-            tecnico.reverse();
+            .reverse()
 
-            options.series[0].data = tecnico;
-            options.xAxis.categories = tecnico;
-
+            options.series[0].data = sumatoria;
             chart1 = new Highcharts.Chart(options);
         }
     });
@@ -460,7 +434,7 @@ function tecnico(i, f){
             height: 500
         },
         xAxis: {
-            categories:[],
+            type: 'category'
         },
         yAxis: {
             title: {
@@ -498,52 +472,31 @@ function categoria(i, f){
         dataType:"json",
         success:function(data){
             let datos = data.dataCategoria;
-            let categoria = data.Categoria;
-            let newData = [];
-            // Filtrar por el tiempo indicado
-            for (let j = 0; j < datos.length; j++) {
-                if(datos[j][0] >= i && datos[j][0] <= f){
-                    newData.push(datos[j]);
-                }
-            }
-            // Sumar cantidad de casos de categorias iguales
-            for (let j = 0; j < newData.length; j++) {
-                for (let k = 0; k < categoria.length; k++) {
-                    if (categoria[k][1] == undefined) {
-                        if (categoria[k] == newData[j][2]) {
-                            categoria[k][1] = 1;
+            let newData = datos.filter(registro => registro[0] >= i && registro[0] <= f)
+            .map(function(registro){
+                return {name: registro[2], y: 1}
+            });
+            const sumatoria = newData.reduce((acumulador, valorActual) => {
+                const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
+                if (yaExiste) {
+                    return acumulador.map((elemento)=>{
+                        if (elemento.name === valorActual.name) {
+                            let name = elemento.name
+                            let y = elemento.y + valorActual.y
+                            return { name, y }
                         }
-                    }else{
-                        if (categoria[k][0] == newData[j][2]) {
-                            categoria[k][1] = categoria[k][1] + 1;
-                        }
-                    }
+                        return elemento;
+                    });
                 }
-            }
-            // Llenar categorias que no tiene cantidad de casos, con 0
-            for (let j = 0; j < categoria.length; j++) {
-                if (categoria[j][1] == undefined) {
-                    categoria[j][1] = 0;
-                }
-            }
-            // Ordenar por numero de casos, la funcion sort, los ordena de forma ascendente
-            categoria.sort(function(a,b) {
-                return a[1] - b[1];
+                return [...acumulador, valorActual]
+            }, []);
+            sumatoria.sort(function(a,b) {
+                return a.y - b.y;
             })
-            // La funcion reverse, los deja ordenados de forma descendente
-            categoria.reverse();
-            // Retorna todas las categorias que tengan por lo menos 1 caso
-            let nuevo = categoria.map(function(data){
-                if (data[1]>0) {
-                    return data
-                }
-            }).slice(0,15)
-            // Extrae los primeros 15 elementos del array
-            // nuevo.slice(0,15)
+            .reverse()
+            let dataReducida = sumatoria.slice(0,15);
 
-            options.series[0].data = nuevo;
-            options.xAxis.categories = nuevo;
-
+            options.series[0].data = dataReducida;
             chart1 = new Highcharts.Chart(options);
         }
     });
@@ -555,7 +508,7 @@ function categoria(i, f){
             height: 500
         },
         xAxis: {
-            categories:[],
+            type: 'category'
         },
         yAxis: {
             title: {
@@ -593,13 +546,11 @@ function tablaCategoria(i, f){
         success:function(data){
             let dataSet = data.dataCategoria;
             let categoria = data.Categoria;
-            let newData = [];
             // Filtrar por el tiempo indicado
-            for (let j = 0; j < dataSet.length; j++) {
-                if(dataSet[j][0] >= i && dataSet[j][0] <= f){
-                    newData.push(dataSet[j]);
-                }
-            }
+            let newData = dataSet.filter(registro => registro[0] >= i && registro[0] <= f)
+            .map(function(registro){
+                return registro
+            });
             // Sumar cantidad de casos de categorias iguales y cuenta las categorias que cumplen con el sla
             for (let j = 0; j < newData.length; j++) {
                 for (let k = 0; k < categoria.length; k++) {

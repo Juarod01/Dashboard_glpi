@@ -1,5 +1,5 @@
 <!--INICIO del cont principal-->
-<div class="container" style="max-width: 100%;">
+<div class="container" style="max-width: 95%;">
 
     <?php include_once "consultas/index.php"; ?>
 
@@ -23,7 +23,9 @@
         <div class="m-auto">
             <h5 class="text-center">Tabla de adaptabilidad a SLA</h5>
             <table id="categoriaSla" class="display"></table>
-            <h5 class="text-center mt-4">Tabla descriptiva de casos con categoria y SLA</h5>
+        </div>
+        <div class="m-auto">
+            <h5 class="text-center mt-4 mb-4">Tabla descriptiva de casos con categoria y SLA</h5>
             <table id="categoria" class="display"></table>
         </div>
     </div>
