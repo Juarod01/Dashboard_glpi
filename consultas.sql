@@ -192,4 +192,10 @@ SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id,
 	ON glpi_tickets_users.users_id = glpi_users.id
 	WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0;
     
+-- año-mes, lista todos los id's y su respectiva incidencia (solo incidencias)
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, glpi_slas.name as sla
+FROM glpi_953.glpi_tickets 
+INNER JOIN glpi_953.glpi_slas
+ON glpi_tickets.slas_id_ttr = glpi_slas.id
+WHERE glpi_tickets.is_deleted = 0 AND glpi_tickets.type = 1;
     

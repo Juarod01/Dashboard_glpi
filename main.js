@@ -70,6 +70,16 @@ function porCategoria(){
     });
 }
 
+function porSLA(){
+    $.post("sla.php", function(data){
+        $("#chartPpal").css("display", "none");
+        $("#chartSdo").css("display", "block");
+        $("#chartSdo").html(data);
+        sla(inicio, fin);
+        // tablaCategoria(inicio, fin);
+    });
+}
+
 function index(){
     var chart1, options;
     $.ajax({
@@ -547,6 +557,83 @@ function categoria(i, f){
         },
         subtitle: {
             text: 'Top 15 de las categorías con mas casos'
+        },
+        plotOptions:{
+            series:{
+                cursor:'pointer',
+                pointWidth: 20,
+                fontSize: 5,
+                dataLabels:{
+                    enabled:true,
+                }
+            },
+        },
+        series: [{
+            name: 'Categoría',
+            data: []
+        }]
+    };
+}
+
+function sla(i, f){
+    var chart1, options;
+    $.ajax({
+        url:"consultas/casos/sla.php",
+        type: "POST",
+        dataType:"json",
+        success:function(data){
+            let datos = data.sla;
+            let newData = datos.filter(registro => registro.mes >= i && registro.mes <= f)
+            .map(function(registro){
+                return {name: registro.sla, y: 1}
+            });
+            const totalCasos = newData.reduce(function(contador, casos){
+                return contador + casos.y
+            }, 0)
+            $("#totalCasos").text("Casos en total: " + totalCasos);
+            const sumatoria = newData.reduce((acumulador, valorActual) => {
+                const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
+                if (yaExiste) {
+                    return acumulador.map((elemento)=>{
+                        if (elemento.name === valorActual.name) {
+                            let name = elemento.name
+                            let y = elemento.y + valorActual.y
+                            return { name, y }
+                        }
+                        return elemento;
+                    });
+                }
+                return [...acumulador, valorActual]
+            }, []);
+            sumatoria.sort(function(a,b) {
+                return a.y - b.y;
+            })
+            .reverse()
+
+            options.series[0].data = sumatoria;
+            chart1 = new Highcharts.Chart(options);
+        }
+    });
+    options = {
+        chart: {
+            renderTo: 'contenedor2',
+            type: 'bar',
+            width: 1400,
+            height: 350
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                    text: 'Cantidad de casos'
+            }    		
+        },
+        title: {
+            text: 'Cantidad de casos por SLA'
+        },
+        subtitle: {
+            text: '(Solo incidencias)'
         },
         plotOptions:{
             series:{
