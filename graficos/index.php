@@ -194,7 +194,7 @@ mes.addEventListener("click", function(){
                 }
             }
 
-            promedio = satisfaccion[0] / x
+            promedio = (satisfaccion[0] / x).toFixed(2)
             $(document).ready(function()
             {
                 $("#ticketMes").text(ticketsMes[0]);

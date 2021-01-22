@@ -12,7 +12,8 @@ $consulta = $conexion->prepare('SELECT glpi_tickets.id as ticket, glpi_tickets.n
         glpi_ticketsatisfactions.satisfaction as satisfaccion
         FROM '.nombre_bd.'.glpi_tickets
         INNER JOIN '.nombre_bd.'.glpi_ticketsatisfactions
-        ON glpi_tickets.id = glpi_ticketsatisfactions.tickets_id');
+        ON glpi_tickets.id = glpi_ticketsatisfactions.tickets_id
+        WHERE is_deleted = 0');
 $consulta->execute();
 $ticketsTitulo = array();
 while ($fila = $consulta->fetch(PDO::FETCH_ASSOC)){

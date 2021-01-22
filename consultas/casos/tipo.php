@@ -6,6 +6,7 @@ $conexion = $objeto->Conectar();
 
 $meses = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS mes1, DATE_FORMAT(date, "%M %Y") AS mes 
                                 FROM '.nombre_bd.'.glpi_tickets
+                                WHERE is_deleted = 0
                                 group by mes 
                                 order by year(date), month(date)');
 $meses->execute();
@@ -18,7 +19,7 @@ while ($fila = $meses->fetch(PDO::FETCH_ASSOC)){
 
 $incidencias = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS mes, count(id) as incidencias 
                                     FROM '.nombre_bd.'.glpi_tickets 
-                                    WHERE type = 1 
+                                    WHERE type = 1 AND is_deleted = 0
                                     group by mes  
                                     order by year(date), month(date)');
 $incidencias->execute();
@@ -29,7 +30,7 @@ while ($fila = $incidencias->fetch(PDO::FETCH_ASSOC)){
 
 $requerimientos = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS mes, count(id) as requerimientos 
                                     FROM '.nombre_bd.'.glpi_tickets
-                                    WHERE type = 2 
+                                    WHERE type = 2 AND is_deleted = 0
                                     group by mes
                                     order by year(date), month(date)');
 $requerimientos->execute();
@@ -42,6 +43,7 @@ $problemas = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") 
                                     FROM '.nombre_bd.'.glpi_tickets
                                     INNER JOIN glpi_problems_tickets
                                     ON glpi_tickets.id = glpi_problems_tickets.tickets_id 
+                                    WHERE is_deleted = 0
                                     group by mes
                                     order by year(date), month(date)');
 $problemas->execute();

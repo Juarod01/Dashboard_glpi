@@ -9,7 +9,7 @@ $conexion = $objeto->Conectar();
 $incidencias = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.name as titulo, 
                                 glpi_tickets.id as id, "Incidencia", glpi_tickets.status as estado
                                 FROM '.nombre_bd.'.glpi_tickets
-                                WHERE type = 1');
+                                WHERE type = 1 AND is_deleted = 0');
 $incidencias->execute();
 $casosPorTipo = array();
 while ($fila = $incidencias->fetch(PDO::FETCH_ASSOC)){
@@ -19,7 +19,7 @@ while ($fila = $incidencias->fetch(PDO::FETCH_ASSOC)){
 $requerimientos = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.name as titulo, 
                                 glpi_tickets.id as id, "Requerimiento", glpi_tickets.status as estado
                                 FROM '.nombre_bd.'.glpi_tickets
-                                WHERE type = 2');
+                                WHERE type = 2 AND is_deleted = 0');
 $requerimientos->execute();
 while ($fila = $requerimientos->fetch(PDO::FETCH_ASSOC)){
     array_push($casosPorTipo, array($fila["mes"], $fila["titulo"], $fila["id"], $fila["Requerimiento"], $fila["estado"]));
@@ -29,7 +29,8 @@ $problemas = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") 
                                 glpi_tickets.id as id, "Problema", glpi_tickets.status as estado
                                 FROM '.nombre_bd.'.glpi_tickets
                                 INNER JOIN glpi_problems_tickets
-                                ON glpi_tickets.id = glpi_problems_tickets.tickets_id');
+                                ON glpi_tickets.id = glpi_problems_tickets.tickets_id
+                                WHERE is_deleted = 0');
 $problemas->execute();
 while ($fila = $problemas->fetch(PDO::FETCH_ASSOC)){
     array_push($casosPorTipo, array($fila["mes"], $fila["titulo"], $fila["id"], $fila["Problema"], $fila["estado"]));

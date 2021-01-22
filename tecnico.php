@@ -15,7 +15,11 @@
             <button id="filtrarTecnico" class="btn btn-primary">filtrar</button>
         </div>
     </div>
-
+    <div class="row" style="justify-content: center; color:#333333;">
+        <div class="text-center">
+            <h5 id="totalCasos"></h5>
+        </div>
+    </div>
     <div class="row mt-4 mb-5">
         <!--En este container se muestran los gráficos-->
         <div id="contenedor2" class="m-auto"></div>

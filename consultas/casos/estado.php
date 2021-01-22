@@ -6,6 +6,7 @@ $conexion = $objeto->Conectar();
 
 $meses = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS mes1, DATE_FORMAT(date, "%M %Y") AS mes 
                                 FROM '.nombre_bd.'.glpi_tickets
+                                WHERE is_deleted = 0
                                 group by mes 
                                 order by year(date), month(date)');
 $meses->execute();
@@ -18,6 +19,7 @@ while ($fila = $meses->fetch(PDO::FETCH_ASSOC)){
 
 $abiertos = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS abiertos, count(id) as casos 
                                     FROM '.nombre_bd.'.glpi_tickets 
+                                    WHERE is_deleted = 0
                                     group by abiertos  
                                     order by year(date), month(date)');
 $abiertos->execute();
@@ -27,7 +29,7 @@ while ($fila = $abiertos->fetch(PDO::FETCH_ASSOC)){
 }
 
 $cerrados = $conexion->prepare('SELECT DATE_FORMAT(closedate, "%Y-%m") AS cerrados, count(id) as casos FROM '.nombre_bd.'.glpi_tickets
-                                    WHERE closedate is not null
+                                    WHERE closedate is not null AND is_deleted = 0
                                     group by cerrados
                                     order by year(closedate), month(closedate)');
 $cerrados->execute();

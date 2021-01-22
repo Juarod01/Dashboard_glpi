@@ -6,6 +6,7 @@ $conexion = $objeto->Conectar();
 
 $meses = $conexion->prepare('SELECT DATE_FORMAT(date, "%Y-%m") AS mes1, DATE_FORMAT(date, "%M %Y") AS mes 
                                 FROM '.nombre_bd.'.glpi_tickets
+                                WHERE is_deleted = 0
                                 group by mes 
                                 order by year(date), month(date)');
 $meses->execute();

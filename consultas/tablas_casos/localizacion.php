@@ -13,7 +13,8 @@ $consulta = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") A
         if(glpi_tickets.status = 6, "1", "0") as Cerrado
         FROM '.nombre_bd.'.glpi_tickets
         INNER JOIN '.nombre_bd.'.glpi_locations
-        ON glpi_tickets.locations_id = glpi_locations.id');
+        ON glpi_tickets.locations_id = glpi_locations.id
+        WHERE is_deleted = 0');
 $consulta->execute();
 $localizacion = array();
 while ($fila = $consulta->fetch(PDO::FETCH_ASSOC)){

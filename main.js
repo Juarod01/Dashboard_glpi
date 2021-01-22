@@ -136,6 +136,11 @@ function estado(i, f){
                 }
             }
 
+            const totalCasos = abiertos.reduce(function(contador, casos){
+                return contador + casos
+            }, 0)
+            $("#totalCasos").text("Casos en total: " + totalCasos);
+
             options.series[0].data = abiertos;
             options.series[1].data = cerrados; 
             options.xAxis.categories = meses2;
@@ -202,7 +207,15 @@ function tipo(i, f){
                     meses2.push(data.meses[j])
                 }
             }
-            // console.log(data)
+            const casosIncidencias = incidencias.reduce(function(contador, casos){
+                return contador + casos
+            }, 0)
+            const casosRequerimientos = requerimientos.reduce(function(contador, casos){
+                return contador + casos
+            }, 0)
+            const totalCasos = casosIncidencias + casosRequerimientos
+            $("#totalCasos").text("Casos en total: " + totalCasos);
+
             options.series[0].data = incidencias;
             options.series[1].data = requerimientos; 
             options.series[2].data = problemas; 
@@ -329,6 +342,12 @@ function localizacion(i, f){
                 return {name: registro.localizacion, y: registro.casos}
             });
 
+            const totalCasos = newData.reduce(function(contador, casos){
+                return contador + casos.y
+            }, 0)
+            console.log(totalCasos)
+            $("#totalCasos").text("Casos en total: " + totalCasos);
+
             const sumatoria = newData.reduce((acumulador, valorActual) => {
                 const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
                 if (yaExiste) {
@@ -403,7 +422,10 @@ function tecnico(i, f){
             .map(function(registro){
                 return {name: registro[1], y: registro[2]}
             });
-
+            const totalCasos = newData.reduce(function(contador, casos){
+                return contador + casos.y
+            }, 0)
+            $("#totalCasos").text("Casos en total: " + totalCasos);
             const sumatoria = newData.reduce((acumulador, valorActual) => {
                 const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
                 if (yaExiste) {
@@ -477,6 +499,10 @@ function categoria(i, f){
             .map(function(registro){
                 return {name: registro[2], y: 1}
             });
+            const totalCasos = newData.reduce(function(contador, casos){
+                return contador + casos.y
+            }, 0)
+            $("#totalCasos").text("Casos en total: " + totalCasos);
             const sumatoria = newData.reduce((acumulador, valorActual) => {
                 const yaExiste = acumulador.find(elemento => elemento.name === valorActual.name);
                 if (yaExiste) {
@@ -590,7 +616,7 @@ function tablaCategoria(i, f){
             // Llena porcentaje
             for (let j = 0; j < categoria.length; j++) {
                 if (categoria[j][1] != 0) {
-                    categoria[j][3] = Math.round((categoria[j][2] / categoria[j][1])*100, -1) + "%";
+                    categoria[j][3] = ((categoria[j][2] / categoria[j][1])*100).toFixed(2) + "%";
                 }else{
                     categoria[j][3] = 0;
                 }
@@ -711,7 +737,7 @@ function tablaLocalizacion(i, f){
             .reverse();
 
             let dataFinal = sumatoria.map(function(registro){
-                let porcentaje = Math.round((registro.cerrado / registro.casos)*100, -1) + "%"
+                let porcentaje = ((registro.cerrado / registro.casos)*100).toFixed(2) + "%"
                 return [
                     registro.name,
                     registro.casos,
@@ -782,7 +808,7 @@ function tablaTecnico(i, f){
             .reverse();
 
             let dataFinal = sumatoria.map(function(registro){
-                let porcentaje = Math.round((registro.cerrado / registro.casos)*100, -1) + "%"
+                let porcentaje = ((registro.cerrado / registro.casos)*100).toFixed(2) + "%"
                 return [
                     registro.name,
                     registro.casos,
