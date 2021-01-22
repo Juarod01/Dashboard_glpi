@@ -661,10 +661,22 @@ function tablaCategoria(i, f){
             let dataSet = data.dataCategoria;
             let categoria = data.Categoria;
             // Filtrar por el tiempo indicado
-            let newData = dataSet.filter(registro => registro[0] >= i && registro[0] <= f)
+            const newData = dataSet.filter(registro => registro[0] >= i && registro[0] <= f)
             .map(function(registro){
                 return registro
             });
+
+            newData.map(function(registro){
+                console.log(registro[0])
+                let f = new Date(registro[0])
+                let options = {year: "numeric", month: "long", day: "numeric"}
+                let fechaModificada = f.toLocaleDateString("es-ES", options)
+                console.log(fechaModificada)
+                return [
+                    ...registro, 
+                    registro[0] = fechaModificada
+                ]
+            })
             // Sumar cantidad de casos de categorias iguales y cuenta las categorias que cumplen con el sla
             for (let j = 0; j < newData.length; j++) {
                 for (let k = 0; k < categoria.length; k++) {
@@ -733,8 +745,8 @@ function tablaCategoria(i, f){
                     data: newData,
                     dom: 'Plfrtip',
                     columns: [
-                        { title: "Mes" },
-                        { title: "Id" },
+                        { title: "Fecha" },
+                        { title: "Ticket" },
                         { title: "Categoría" },
                         { title: "SLA" },
                         { title: "Tiempo sla (horas)" },
@@ -742,6 +754,7 @@ function tablaCategoria(i, f){
                         { title: "Criterio" },
                         { title: "Estado" },
                     ],
+                    order: [[ 1, "desc" ]],
                     searchPanes: {
                         order: ['Estado', 'Categoría', 'Criterio']
                     },
@@ -767,17 +780,30 @@ function tablaTipo(i, f){
                 }
             }
 
+            newData.map(function(registro){
+                console.log(registro[0])
+                let f = new Date(registro[0])
+                let options = {year: "numeric", month: "long", day: "numeric"}
+                let fechaModificada = f.toLocaleDateString("es-ES", options)
+                console.log(fechaModificada)
+                return [
+                    ...registro, 
+                    registro[0] = fechaModificada
+                ]
+            })
+
             $(document).ready(function() {
                 $('#casosTipo').DataTable( {
                     dom: 'Plfrtip',
                     data: newData,
                     columns: [
-                        { title: "Mes" },
+                        { title: "Fecha" },
                         { title: "Titulo" },
-                        { title: "Id" },
+                        { title: "Ticket" },
                         { title: "Tipo" },
                         { title: "Estado" },
-                    ]
+                    ],
+                    order: [[ 2, "desc" ]]
                 } );
             } );
             
@@ -970,7 +996,7 @@ function tablaSatisfaccion(i, f){
                         { title: "Cerrado" },
                         { title: "Satisfacción" },
                     ],
-                    // order: [[ 1, "desc" ]]
+                    order: [[ 4, "desc" ]]
                 } );
             } );
             

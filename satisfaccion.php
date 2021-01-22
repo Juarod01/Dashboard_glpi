@@ -1,5 +1,5 @@
 <!--INICIO del cont principal-->
-<div class="container">
+<div class="container" style="max-width: 95%;">
 
     <?php include_once "consultas/index.php"; ?>
 
@@ -21,8 +21,8 @@
         <div id="contenedor2" class="m-auto"></div>
         <!-- En este contenedor se muestra la tabla de datos -->
         <div class="m-auto">
-            <h5 class="text-center">Tabla de casos por técnico</h5>
-            <table id="casosSatisfaccion" class="display" width="100%"></table>
+            <h5 class="text-center">Tabla de casos por satisfacción</h5>
+            <table id="casosSatisfaccion" class="display"></table>
         </div>
     </div>
 

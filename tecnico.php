@@ -1,5 +1,5 @@
 <!--INICIO del cont principal-->
-<div class="container">
+<div class="container" style="max-width: 95%;">
 
     <?php include_once "consultas/index.php"; ?>
 

@@ -13,7 +13,7 @@ while ($fila = $consulta->fetch(PDO::FETCH_ASSOC)){
     array_push($nombreCategoria, array($fila["nombre"]));
 }
 
-$consulta = $conexion->prepare('SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id,
+$consulta = $conexion->prepare('SELECT glpi_tickets.date AS mes, glpi_tickets.id as id,
         glpi_itilcategories.completename AS categoria, 
         glpi_slas.name as name_sla,
         glpi_slas.number_time as time_sla,
