@@ -609,8 +609,9 @@ function sla(i, f){
                 return a.y - b.y;
             })
             .reverse()
+            let dataReducida = sumatoria.slice(0,10);
 
-            options.series[0].data = sumatoria;
+            options.series[0].data = dataReducida;
             chart1 = new Highcharts.Chart(options);
         }
     });
@@ -619,7 +620,7 @@ function sla(i, f){
             renderTo: 'contenedor2',
             type: 'bar',
             width: 1400,
-            height: 350
+            height: 450
         },
         xAxis: {
             type: 'category'
@@ -633,7 +634,7 @@ function sla(i, f){
             text: 'Cantidad de casos por SLA'
         },
         subtitle: {
-            text: '(Solo incidencias)'
+            text: 'Top 10 - (Solo incidencias)'
         },
         plotOptions:{
             series:{

@@ -121,6 +121,7 @@ WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0
 group by nombre;
 
 -- Actualizar SLA´s
+
 UPDATE `glpi_953`.`glpi_tickets` SET `slas_id_ttr` = '36' WHERE (`slas_id_ttr` = '28');
 
 
@@ -193,9 +194,14 @@ SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id,
 	WHERE glpi_tickets_users.type = 2 AND glpi_tickets.is_deleted = 0;
     
 -- año-mes, lista todos los id's y su respectiva incidencia (solo incidencias)
-SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m") AS mes, glpi_tickets.id as id, glpi_slas.name as sla
+SELECT DATE_FORMAT(glpi_tickets.date, "%Y-%m-%d") AS mes, glpi_tickets.id as id, glpi_slas.name as sla
 FROM glpi_953.glpi_tickets 
 INNER JOIN glpi_953.glpi_slas
 ON glpi_tickets.slas_id_ttr = glpi_slas.id
 WHERE glpi_tickets.is_deleted = 0 AND glpi_tickets.type = 1;
-    
+
+SELECT glpi_tickets.date AS mes, glpi_tickets.id as id, glpi_slas.name as sla
+FROM glpi_953.glpi_tickets 
+INNER JOIN glpi_953.glpi_slas
+ON glpi_tickets.slas_id_ttr = glpi_slas.id
+WHERE glpi_tickets.is_deleted = 0 AND glpi_tickets.type = 1;
