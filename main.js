@@ -76,7 +76,6 @@ function porSLA(){
         $("#chartSdo").css("display", "block");
         $("#chartSdo").html(data);
         sla(inicio, fin);
-        // tablaCategoria(inicio, fin);
     });
 }
 
@@ -667,17 +666,6 @@ function tablaCategoria(i, f){
                 return registro
             });
 
-            newData.map(function(registro){
-                console.log(registro[0])
-                let f = new Date(registro[0])
-                let options = {year: "numeric", month: "long", day: "numeric"}
-                let fechaModificada = f.toLocaleDateString("es-ES", options)
-                console.log(fechaModificada)
-                return [
-                    ...registro, 
-                    registro[0] = fechaModificada
-                ]
-            })
             // Sumar cantidad de casos de categorias iguales y cuenta las categorias que cumplen con el sla
             for (let j = 0; j < newData.length; j++) {
                 for (let k = 0; k < categoria.length; k++) {
@@ -746,12 +734,12 @@ function tablaCategoria(i, f){
                     data: newData,
                     dom: 'Plfrtip',
                     columns: [
-                        { title: "Fecha" },
+                        { title: "Fecha de apertura" },
                         { title: "Ticket" },
                         { title: "Categoría" },
                         { title: "SLA" },
-                        { title: "Tiempo sla (horas)" },
-                        { title: "Tiempo solucionado (horas)" },
+                        { title: "SLA (horas)" },
+                        { title: "Solucionado (horas)" },
                         { title: "Criterio" },
                         { title: "Estado" },
                     ],
@@ -781,30 +769,18 @@ function tablaTipo(i, f){
                 }
             }
 
-            newData.map(function(registro){
-                console.log(registro[0])
-                let f = new Date(registro[0])
-                let options = {year: "numeric", month: "long", day: "numeric"}
-                let fechaModificada = f.toLocaleDateString("es-ES", options)
-                console.log(fechaModificada)
-                return [
-                    ...registro, 
-                    registro[0] = fechaModificada
-                ]
-            })
-
             $(document).ready(function() {
                 $('#casosTipo').DataTable( {
                     dom: 'Plfrtip',
                     data: newData,
                     columns: [
-                        { title: "Fecha" },
-                        { title: "Titulo" },
+                        { title: "Fecha apertura" },
                         { title: "Ticket" },
+                        { title: "Titulo" },
                         { title: "Tipo" },
                         { title: "Estado" },
                     ],
-                    order: [[ 2, "desc" ]]
+                    order: [[ 1, "desc" ]]
                 } );
             } );
             
@@ -947,7 +923,8 @@ function tablaTecnico(i, f){
                         { title: "Cerrados" },
                         { title: "Porcentaje" },
                     ],
-                    order: [[ 1, "desc" ]]
+                    order: [[ 1, "desc" ]],
+                    lengthMenu: [[25, 50, -1], [25, 50, "All"]]
                 } );
             } );
             
